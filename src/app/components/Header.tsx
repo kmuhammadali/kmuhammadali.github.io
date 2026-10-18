@@ -41,7 +41,7 @@ export function Header({ activeSection, onSectionChange, onHeightChange }: Heade
     onSectionChange('home');
     setIsMenuOpen(false);
   }}
-  className="flex items-center space-x-2 cursor-pointer"
+  className="flex items-center space-x-2"
   aria-label="Go to Home"
 >
   <Terminal className="w-6 h-6 text-primary" />
@@ -49,6 +49,7 @@ export function Header({ activeSection, onSectionChange, onHeightChange }: Heade
     {siteContent.name}
   </span>
 </button>
+
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-1">
             {sections.map((section) => (
