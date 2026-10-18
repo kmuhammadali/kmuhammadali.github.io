@@ -1,4 +1,4 @@
-import { siteContent } from '../../config/siteContent';
+import { useSiteContent } from '../../context/ContentProvider';
 import { sendContact } from '../../lib/contact';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
@@ -8,7 +8,8 @@ import { Card } from './ui/card';
 import { Mail, Github, Linkedin, Terminal, Send, MapPin } from 'lucide-react';
 
 export function ContactSection() {
-  const content = siteContent.contact;
+  const { content: siteData } = useSiteContent();
+  const content = siteData.contact;
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [website, setWebsite] = useState('');
   const submitting = useRef(false);
