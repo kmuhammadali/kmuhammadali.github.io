@@ -17,24 +17,35 @@ concurrency:
 
 jobs:
   build:
+    name: Typecheck, Test and Build
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       pages: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Typecheck, Test and Build
-        run: npm run typecheck && npm test && npm run build
+      - name: Run TypeScript checks
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build website
+        run: npm run build
         env:
           VITE_CONTACT_API_URL: ${{ vars.VITE_CONTACT_API_URL }}
 
@@ -42,13 +53,14 @@ jobs:
         if: github.ref_name == 'main'
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages Artifact
+      - name: Upload Pages artifact
         if: github.ref_name == 'main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    name: Deploy Production
     if: github.ref_name == 'main'
     needs: build
     runs-on: ubuntu-latest
@@ -62,6 +74,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy
+      - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
