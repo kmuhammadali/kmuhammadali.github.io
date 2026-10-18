@@ -9,10 +9,10 @@ export const siteContent = {
   ],
   home: {
     terminal: 'terminal.app',
-    role: 'Digital Economist',
+    role: 'I am Digital Economist',
     directories: ['drwxr-xr-x home/', 'drwxr-xr-x about/', 'drwxr-xr-x skills/'],
-    mission: ['Crafting digital experiences through code and creativity.', 'Specializing in graphic design, video production, and photography.'],
-    typingText: 'MUHAMMAD.ALI',
+    mission: ['Exploring the intersection of economics and technology.', 'Turning data into insights for a smarter digital future.'],
+    typingText: 'I.AM.MUHAMMAD.ALI',
     cards: [
       { section: 'about', title: './about.sys', description: 'About Me' },
       { section: 'skills', title: './skills.mov', description: 'My Skills' },
@@ -54,10 +54,22 @@ export const siteContent = {
     linksTitle: 'connection.links',
     // Set href to your real URL to enable a link.
     links: [
-      { label: 'email.sh', value: 'kamoliddeenov@gmail.com', href: '' },
-      { label: 'github.com', value: 'kmuhammadali', href: '' },
-      { label: 'linkedin.com', value: 'muhammadali-ai', href: '' },
-      { label: 'location.geo', value: 'Uzbekistan', href: '' },
+      {
+    label: 'email.sh',
+    value: 'kamoliddeenov@gmail.com',
+    href: 'mailto:kamoliddeenov@gmail.com'
+  },
+  {
+    label: 'github.com',
+    value: 'kmuhammadali',
+    href: 'https://github.com/kmuhammadali'
+  },
+  {
+    label: 'linkedin.com',
+    value: 'muhammadali-ai',
+    href: 'https://www.linkedin.com/in/muhammadali-ai/'
+  },
+      { label: 'location.geo', value: 'Namangan, Uzbekistan', href: '' },
     ],
   },
   footer: {
