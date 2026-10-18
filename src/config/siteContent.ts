@@ -1,6 +1,6 @@
 // Edit visible website content here. Placeholder fields do not claim personal facts.
 export const siteContent = {
-  name: 'root@muhammadali',
+  name: 'root@muhammad-ali',
   navigation: [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
