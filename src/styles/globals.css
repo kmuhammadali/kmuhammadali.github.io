@@ -1,0 +1,278 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 14px;
+  --background: #0a0a0a;
+  --foreground: #00ff41;
+  --card: #111111;
+  --card-foreground: #00ff41;
+  --popover: #111111;
+  --popover-foreground: #00ff41;
+  --primary: #00ff41;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #00ff41;
+  --muted: #1a1a1a;
+  --muted-foreground: #00cc33;
+  --accent: #002200;
+  --accent-foreground: #00ff41;
+  --destructive: #ff0040;
+  --destructive-foreground: #ffffff;
+  --border: #00ff41;
+  --input: transparent;
+  --input-background: #111111;
+  --switch-background: #00cc33;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #00ff41;
+  --chart-1: #00ff41;
+  --chart-2: #00cc33;
+  --chart-3: #009900;
+  --chart-4: #00aa22;
+  --chart-5: #00dd44;
+  --radius: 0.25rem;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #00ff41;
+  --sidebar-primary: #00ff41;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #00ff41;
+  --sidebar-border: #00ff41;
+  --sidebar-ring: #00ff41;
+  
+  /* Custom hacker theme variables */
+  --green-matrix: #00ff41;
+  --green-dark: #00cc33;
+  --green-darker: #009900;
+  --black-deep: #0a0a0a;
+  --black-light: #111111;
+  --black-lighter: #1a1a1a;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #00ff41;
+  --card: #111111;
+  --card-foreground: #00ff41;
+  --popover: #111111;
+  --popover-foreground: #00ff41;
+  --primary: #00ff41;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #00ff41;
+  --muted: #1a1a1a;
+  --muted-foreground: #00cc33;
+  --accent: #002200;
+  --accent-foreground: #00ff41;
+  --destructive: #ff0040;
+  --destructive-foreground: #ffffff;
+  --border: #00ff41;
+  --input: #111111;
+  --ring: #00ff41;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #00ff41;
+  --chart-2: #00cc33;
+  --chart-3: #009900;
+  --chart-4: #00aa22;
+  --chart-5: #00dd44;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #00ff41;
+  --sidebar-primary: #00ff41;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #00ff41;
+  --sidebar-border: #00ff41;
+  --sidebar-ring: #00ff41;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Custom colors */
+  --color-green-matrix: var(--green-matrix);
+  --color-green-dark: var(--green-dark);
+  --color-green-darker: var(--green-darker);
+  --color-black-deep: var(--black-deep);
+  --color-black-light: var(--black-light);
+  --color-black-lighter: var(--black-lighter);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Courier New', monospace;
+    background: radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 65, 0.03) 0%, transparent 50%),
+                #0a0a0a;
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      color: var(--green-matrix);
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      color: var(--green-matrix);
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      color: var(--green-matrix);
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      color: var(--green-matrix);
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      color: var(--green-dark);
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Custom hacker-themed animations */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes terminal-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.glitch-effect {
+  animation: glitch 0.3s infinite;
+}
+
+.terminal-cursor::after {
+  content: '_';
+  animation: terminal-cursor 1s infinite;
+  color: var(--green-matrix);
+}
+
+.matrix-bg {
+  background: linear-gradient(90deg, transparent 98%, rgba(0, 255, 65, 0.03) 100%),
+              linear-gradient(0deg, transparent 98%, rgba(0, 255, 65, 0.03) 100%);
+  background-size: 20px 20px;
+}
+
+.cyber-border {
+  position: relative;
+  border: 1px solid var(--green-matrix);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.cyber-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent, 
+    rgba(0, 255, 65, 0.1), 
+    transparent, 
+    rgba(0, 255, 65, 0.1)
+  );
+  z-index: -1;
+  border-radius: inherit;
+}
