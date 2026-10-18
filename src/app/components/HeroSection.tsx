@@ -79,48 +79,50 @@ useEffect(() => {
     <section className="min-h-screen flex items-center justify-center relative matrix-bg">
       <div className="container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
+          
           {/* Terminal Window */}
           <div className="cyber-border bg-black-light/50 rounded-lg p-8 mb-8">
             <div className="flex items-center space-x-2 mb-6 pb-4 border-b border-primary/20">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-primary"></div>
-              <span className="ml-4 font-mono text-sm text-muted-foreground">{siteContent.home.terminal}</span>
+              <span className="ml-4 font-mono text-sm text-muted-foreground">
+                {siteContent.home.terminal}
+              </span>
             </div>
-            
 
-<div className="text-left space-y-2 font-mono">
-  {terminalLines.map((line, index) => {
-    const start = terminalLines
-      .slice(0, index)
-      .reduce((sum, item) => sum + item.length + 1, 0);
+            <div className="text-left space-y-2 font-mono">
+              {terminalLines.map((line, index) => {
+                const start = terminalLines
+                  .slice(0, index)
+                  .reduce((sum, item) => sum + item.length + 1, 0);
 
-    const visibleLength = Math.max(
-      0,
-      Math.min(line.length, typedCount - start)
-    );
+                const visibleLength = Math.max(
+                  0,
+                  Math.min(line.length, typedCount - start)
+                );
 
-    if (typedCount <= start) return null;
+                if (typedCount <= start) return null;
 
-    const isCommand = line.startsWith('$ ');
-    const isActive =
-      typedCount >= start &&
-      typedCount <= start + line.length;
+                const isCommand = line.startsWith('$ ');
+                const isActive =
+                  typedCount >= start &&
+                  typedCount <= start + line.length;
 
-    return (
-      <div
-        key={index}
-        className={isCommand ? 'text-primary' : 'text-green-dark'}
-      >
-        {line.slice(0, visibleLength)}
-        {isActive && showCursor && (
-          <span className="text-primary">_</span>
-        )}
-      </div>
-    );
-  })}
-</div>
-</div>
+                return (
+                  <div
+                    key={index}
+                    className={isCommand ? 'text-primary' : 'text-green-dark'}
+                  >
+                    {line.slice(0, visibleLength)}
+                    {isActive && showCursor && (
+                      <span className="text-primary">_</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -161,7 +163,6 @@ useEffect(() => {
             <ChevronDown className="w-5 h-5" />
           </div>
         </div>
-      </div>
       </div>
       
       {/* Matrix-style background effect */}
