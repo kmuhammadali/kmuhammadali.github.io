@@ -34,12 +34,21 @@ export function Header({ activeSection, onSectionChange, onHeightChange }: Heade
     <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 bg-black-deep/80 backdrop-blur-sm border-b border-primary/20">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Terminal className="w-6 h-6 text-primary" />
-            <span className="font-mono text-primary terminal-cursor">{siteContent.name}</span>
-          </div>
-
+          {/* Logo */}   
+<button
+  type="button"
+  onClick={() => {
+    onSectionChange('home');
+    setIsMenuOpen(false);
+  }}
+  className="flex items-center space-x-2 cursor-pointer"
+  aria-label="Go to Home"
+>
+  <Terminal className="w-6 h-6 text-primary" />
+  <span className="font-mono text-primary terminal-cursor">
+    {siteContent.name}
+  </span>
+</button>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-1">
             {sections.map((section) => (
