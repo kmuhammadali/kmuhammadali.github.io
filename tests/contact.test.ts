@@ -18,9 +18,9 @@ test('only confirms success for a Telegram message receipt; user text stays plai
   const fetchMock = mock.method(globalThis, 'fetch', async (_url: unknown, init: RequestInit) => {
     const sent = JSON.parse(init.body as string);
     assert.equal(sent.chat_id, '123');
-    assert.ok(sent.text.includes('Visitor <b>name</b>'));
+    assert.ok(sent.text.includes('Visitor &lt;b&gt;name&lt;/b&gt;'));
     assert.ok(sent.text.includes('Hello *world*'));
-    assert.equal(sent.parse_mode, undefined);
+    assert.equal(sent.parse_mode, 'HTML');
     assert.equal(sent.link_preview_options.is_disabled, true);
     assert.ok(sent.text.length < 4096);
     return Response.json({ ok: true, result: { message_id: 42 } });
