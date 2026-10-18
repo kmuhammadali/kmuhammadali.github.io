@@ -1,44 +1,79 @@
+
 name: Deploy GitHub Pages
+
 on:
   push:
+    branches:
+      - main
+      - feature/admin-cms
   workflow_dispatch:
+
 permissions:
   contents: read
+
 concurrency:
-  group: pages
+  group: pages-${{ github.ref_name }}
   cancel-in-progress: true
+
 jobs:
   build:
+    name: Typecheck, Test and Build
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       pages: read
-    if: github.ref_name == github.event.repository.default_branch
-    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
-      - uses: actions/configure-pages@v5
-      - run: npm ci
-      - run: npm run typecheck && npm test && npm run build
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript checks
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build website
+        run: npm run build
         env:
           VITE_CONTACT_API_URL: ${{ vars.VITE_CONTACT_API_URL }}
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Configure GitHub Pages
+        if: github.ref_name == 'main'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: github.ref_name == 'main'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
   deploy:
+    name: Deploy Production
+    if: github.ref_name == 'main'
     needs: build
     runs-on: ubuntu-latest
+
     permissions:
       pages: write
       id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Deploy
+      - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
