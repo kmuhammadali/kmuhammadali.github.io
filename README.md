@@ -79,4 +79,6 @@ Rasmiy qo‘llanmalar: [Vite Pages deploy](https://vite.dev/guide/static-deploy.
 - `VITE_CONTACT_API_URL`: repository Actions variable sifatida sozlangan.
 - Telegram tokeni va chat ID faqat Worker secretlari sifatida saqlanadi.
 
-GitHub Pages Actions deploy usuliga o‘tkazildi; avvalgi `muhammad-ali.uz` redirecti olib tashlandi. Oldingi `CNAME` fayli `legacy/CNAME` ichida tarixiy nusxa sifatida qolgan. Mahalliy frontend/Worker typecheck, build, test va Worker dry-run bajarildi. Haqiqiy forma delivery tekshiruvi token sozlangandan keyin bajariladi.
+GitHub Pages Actions deploy usuliga o‘tkazildi; avvalgi `muhammad-ali.uz` redirecti olib tashlandi. Oldingi `CNAME` fayli `legacy/CNAME` ichida tarixiy nusxa sifatida qolgan. Mahalliy frontend/Worker typecheck, build, test va Worker dry-run bajarildi. Jonli forma orqali bitta `Portfolio deployment test` xabari yuborildi: Telegram tasdig‘i olindi, success statusi ko‘rsatildi va maydonlar tozalandi. Status logi eng yangi natijani avtomatik ko‘rsatadi.
+
+Jonli saytda 1280×900 desktop va 390×844 mobil ko‘rinish, uch karta, mobil menyu, kontakt forma, assetlar, 5000 Matrix katagi, cursor/bounce animatsiyalari va 0.3s o‘tishlar tekshirildi. CORS ruxsat etilgan origin uchun 204, begona origin uchun 403 qaytardi. Asl dizaynni saqlash uchun kichik ekranlarda Home terminalining yuqori qismi fixed header ortida qoladigan mavjud holat o‘zgartirilmadi.

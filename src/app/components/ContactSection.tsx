@@ -1,6 +1,6 @@
 import { siteContent } from '../../config/siteContent';
 import { sendContact } from '../../lib/contact';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -12,6 +12,7 @@ export function ContactSection() {
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [website, setWebsite] = useState('');
   const submitting = useRef(false);
+  const terminalRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,6 +20,11 @@ export function ContactSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [terminalOutput, setTerminalOutput] = useState<string[]>(content.initialOutput);
+
+  useEffect(() => {
+    const terminal = terminalRef.current;
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+  }, [terminalOutput]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -164,7 +170,7 @@ export function ContactSection() {
                 <span className="ml-2 font-mono text-sm text-muted-foreground">{content.terminal}</span>
               </div>
               
-              <div role="status" aria-live="polite" className="font-mono text-sm space-y-1 max-h-48 overflow-y-auto">
+              <div ref={terminalRef} role="status" aria-live="polite" className="font-mono text-sm space-y-1 max-h-48 overflow-y-auto">
                 {terminalOutput.map((line, index) => (
                   <div key={index} className="text-green-dark">
                     {line}
