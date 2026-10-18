@@ -1,3 +1,4 @@
+import { ContentProvider } from '../context/ContentProvider';
 import { siteContent } from '../config/siteContent';
 import { useState, type CSSProperties } from 'react';
 import { Header } from './components/Header';
@@ -6,13 +7,20 @@ import { PortfolioGrid } from './components/PortfolioGrid';
 import { ContactSection } from './components/ContactSection';
 import '../styles/layout.css';
 
-export default function App() {
+function AppContent() {
   const [activeSection, setActiveSection] = useState('home');
   const [headerHeight, setHeaderHeight] = useState(57);
   const changeSection = (section: string) => {
     setActiveSection(section);
     window.scrollTo(0, 0);
   };
+  export default function App() {
+  return (
+    <ContentProvider>
+      <AppContent />
+    </ContentProvider>
+  );
+}
 
   const renderSection = () => {
     switch (activeSection) {
