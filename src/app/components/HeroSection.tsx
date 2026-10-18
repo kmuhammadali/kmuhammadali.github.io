@@ -1,4 +1,4 @@
-import { siteContent } from '../../config/siteContent';
+import { useSiteContent } from '../../context/ContentProvider';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getMatrixGrid } from './matrixGrid';
 import { Button } from './ui/button';
@@ -9,6 +9,9 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onSectionChange }: HeroSectionProps) {
+  const { content } = useSiteContent();
+  const home = content.home;
+  
   const [typedCount, setTypedCount] = useState(0);
   const matrixRef = useRef<HTMLDivElement>(null);
   const [matrixGrid, setMatrixGrid] = useState({ rows: 50, columns: 100 });
@@ -42,18 +45,19 @@ export function HeroSection({ onSectionChange }: HeroSectionProps) {
   
 const terminalLines = [
   '$ whoami',
-  siteContent.home.role,
+  home.role,
   '$ ls -la portfolio/',
-  ...siteContent.home.directories,
+  ...home.directories,
   '$ cat mission.txt',
-  ...siteContent.home.mission,
-  `$ echo "${siteContent.home.typingText}"`,
+  ...home.mission,
+  `$ echo "${home.typingText}"`,
 ];
 
 const fullText = terminalLines.join('\n');
 
 useEffect(() => {
   let index = 0;
+  setTypedCount(0);
 
   const timer = setInterval(() => {
     index += 1;
@@ -87,7 +91,7 @@ useEffect(() => {
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-primary"></div>
               <span className="ml-4 font-mono text-sm text-muted-foreground">
-                {siteContent.home.terminal}
+                {home.terminal}
               </span>
             </div>
 
@@ -127,39 +131,39 @@ useEffect(() => {
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
             <Button
-              onClick={() => onSectionChange(siteContent.home.cards[0].section)}
+              onClick={() => onSectionChange(home.cards[0].section)}
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
               variant="outline"
             >
               <Code className="w-8 h-8" />
-              <span>{siteContent.home.cards[0].title}</span>
-              <span className="text-xs text-muted-foreground">{siteContent.home.cards[0].description}</span>
+              <span>{home.cards[0].title}</span>
+              <span className="text-xs text-muted-foreground">{home.cards[0].description}</span>
             </Button>
             
             <Button
-              onClick={() => onSectionChange(siteContent.home.cards[1].section)}
+              onClick={() => onSectionChange(home.cards[1].section)}
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
               variant="outline"
             >
               <Video className="w-8 h-8" />
-              <span>{siteContent.home.cards[1].title}</span>
-              <span className="text-xs text-muted-foreground">{siteContent.home.cards[1].description}</span>
+              <span>{home.cards[1].title}</span>
+              <span className="text-xs text-muted-foreground">{home.cards[1].description}</span>
             </Button>
             
             <Button
-              onClick={() => onSectionChange(siteContent.home.cards[2].section)}
+              onClick={() => onSectionChange(home.cards[2].section)}
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
               variant="outline"
             >
               <Camera className="w-8 h-8" />
-              <span>{siteContent.home.cards[2].title}</span>
-              <span className="text-xs text-muted-foreground">{siteContent.home.cards[2].description}</span>
+              <span>{home.cards[2].title}</span>
+              <span className="text-xs text-muted-foreground">{home.cards[2].description}</span>
             </Button>
           </div>
 
           {/* Scroll Indicator */}
           <div className="flex flex-col items-center space-y-2 text-primary animate-bounce">
-            <span className="font-mono text-sm">{siteContent.home.scroll}</span>
+            <span className="font-mono text-sm">{home.scroll}</span>
             <ChevronDown className="w-5 h-5" />
           </div>
         </div>
