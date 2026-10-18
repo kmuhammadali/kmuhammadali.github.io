@@ -50,6 +50,15 @@ function validate(input: unknown): { name: string; email: string; message: strin
   return { name, email, message };
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get('Origin') ?? '';
@@ -93,7 +102,19 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: env.TELEGRAM_CHAT_ID,
-          text: `Website contact\n\nName: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`,
+          
+text: `📩 <b>New Message</b>
+
+👤 <b>Name:</b> ${escapeHtml(data.name)}
+📧 <b>Email:</b> ${escapeHtml(data.email)}
+
+💬 <b>Message:</b>
+${escapeHtml(data.message)}
+
+━━━━━━━━━━━━━━
+🌐 muhammad-ali.uz`,
+parse_mode: 'HTML',
+
           link_preview_options: { is_disabled: true },
         }),
         signal: AbortSignal.timeout(10000),
