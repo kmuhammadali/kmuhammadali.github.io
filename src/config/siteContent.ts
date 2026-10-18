@@ -1,6 +1,6 @@
 // Edit visible website content here. Placeholder fields do not claim personal facts.
 export const siteContent = {
-  name: 'Muhammad Ali',
+  name: 'root@muhammad-ali',
   navigation: [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -9,10 +9,10 @@ export const siteContent = {
   ],
   home: {
     terminal: 'terminal.app',
-    role: 'Creative Developer & Visual Artist',
-    directories: ['drwxr-xr-x design/', 'drwxr-xr-x video/', 'drwxr-xr-x photography/'],
+    role: 'Digital Economist',
+    directories: ['drwxr-xr-x home/', 'drwxr-xr-x about/', 'drwxr-xr-x skills/'],
     mission: ['Crafting digital experiences through code and creativity.', 'Specializing in graphic design, video production, and photography.'],
-    typingText: 'CREATIVE.HACKER.PORTFOLIO',
+    typingText: 'MUHAMMAD.ALI',
     cards: [
       { section: 'about', title: './about.sys', description: 'About Me' },
       { section: 'skills', title: './skills.mov', description: 'My Skills' },
@@ -54,14 +54,14 @@ export const siteContent = {
     linksTitle: 'connection.links',
     // Set href to your real URL to enable a link.
     links: [
-      { label: 'email.sh', value: 'Add your email', href: '' },
-      { label: 'github.com', value: 'Add your GitHub URL', href: '' },
-      { label: 'linkedin.com', value: 'Add your LinkedIn URL', href: '' },
-      { label: 'location.geo', value: 'Add your location', href: '' },
+      { label: 'email.sh', value: 'kamoliddeenov@gmail.com', href: '' },
+      { label: 'github.com', value: 'kmuhammadali', href: '' },
+      { label: 'linkedin.com', value: 'muhammadali-ai', href: '' },
+      { label: 'location.geo', value: 'Uzbekistan', href: '' },
     ],
   },
   footer: {
-    copyright: '© 2024 Creative.Hacker.Portfolio - Crafted with code and creativity',
-    status: 'Online', lastUpdate: '2024.08.18', version: 'v1.0.0',
+    copyright: '© 2026 Muhammad Ali - Crafted with code and creativity',
+    status: 'Online', lastUpdate: '2026.10.18', version: 'v1.0.1',
   },
 };
