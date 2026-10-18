@@ -16,5 +16,5 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
 test('navigation and three original Home cards target all requested sections', () => {
   assert.deepEqual(siteContent.navigation.map(item => item.label), ['Home', 'About', 'Skills', 'Contact']);
   assert.deepEqual(siteContent.home.cards.map(item => item.section), ['about', 'skills', 'contact']);
-  assert.equal(siteContent.name, 'Muhammad Ali');
+  assert.equal(siteContent.name, 'root@muhammad-ali');
 });
