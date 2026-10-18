@@ -1,5 +1,5 @@
+import { useSiteContent } from '../context/ContentProvider';
 import { ContentProvider } from '../context/ContentProvider';
-import { siteContent } from '../config/siteContent';
 import { useState, type CSSProperties } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
@@ -8,6 +8,8 @@ import { ContactSection } from './components/ContactSection';
 import '../styles/layout.css';
 
 function AppContent() {
+  const { content } = useSiteContent();
+  
   const [activeSection, setActiveSection] = useState('home');
   const [headerHeight, setHeaderHeight] = useState(57);
   const changeSection = (section: string) => {
@@ -26,10 +28,8 @@ function AppContent() {
     switch (activeSection) {
       case 'home':
         return <HeroSection onSectionChange={changeSection} />;
-      case 'about':
-        return <PortfolioGrid {...siteContent.about} />;
-      case 'skills':
-        return <PortfolioGrid {...siteContent.skills} />;
+      case 'about': return <PortfolioGrid {...content.about} />;
+      case 'skills': return <PortfolioGrid {...content.skills} />;
       case 'contact':
         return <ContactSection />;
       default:
@@ -49,12 +49,12 @@ function AppContent() {
       <footer className="border-t border-primary/20 py-8 px-4">
         <div className="container mx-auto text-center">
           <p className="font-mono text-muted-foreground text-sm">
-            {siteContent.footer.copyright}
+            {content.footer.copyright}
           </p>
           <p className="font-mono text-xs text-muted-foreground mt-2">
-            System.Status: <span className="text-primary">{siteContent.footer.status}</span> | 
-            Last.Update: <span className="text-primary">{siteContent.footer.lastUpdate}</span> |
-            Build.Version: <span className="text-primary">{siteContent.footer.version}</span>
+            System.Status: <span className="text-primary">{content.footer.status}</span> | 
+            Last.Update: <span className="text-primary">{content.footer.lastUpdate}</span> |
+            Build.Version: <span className="text-primary">{content.footer.version}</span>
           </p>
         </div>
       </footer>
