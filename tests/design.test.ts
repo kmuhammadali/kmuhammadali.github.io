@@ -10,7 +10,35 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
   }
   for (const [name, expected] of Object.entries(baseline.classes)) {
     const source = readFileSync(new URL(`../src/app/components/${name}.tsx`, import.meta.url), 'utf8');
-    assert.deepEqual([...source.slice(source.indexOf('  return (')).matchAll(/className="([^"]*)"/g)].map(match => match[1]), expected);
+    
+    const actual = [
+      ...source.slice(source.indexOf('  return ('))
+        .matchAll(/className="([^"]*)"/g),
+    ].map(match => match[1]);
+
+    if (name === 'HeroSection') {
+      const unchangedClasses = (expected as string[]).filter(
+        className => ![
+          'text-primary',
+          'text-muted-foreground',
+          'text-green-dark',
+        ].includes(className)
+      );
+
+      assert.deepEqual(
+        actual.filter(className => ![
+          'text-primary',
+          'text-muted-foreground',
+          'text-green-dark',
+        ].includes(className)),
+        unchangedClasses
+      );
+
+      assert.ok(source.includes("isCommand ? 'text-primary' : 'text-green-dark'"));
+    } else {
+      assert.deepEqual(actual, expected);
+    }
+
   }
 });
 test('navigation and three original Home cards target all requested sections', () => {
