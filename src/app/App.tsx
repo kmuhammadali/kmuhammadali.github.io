@@ -1,63 +1,106 @@
-import { useSiteContent } from '../context/ContentProvider';
-import { ContentProvider } from '../context/ContentProvider';
+
 import { useState, type CSSProperties } from 'react';
+import {
+  ContentProvider,
+  useSiteContent,
+} from '../context/ContentProvider';
+
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { PortfolioGrid } from './components/PortfolioGrid';
 import { ContactSection } from './components/ContactSection';
+
 import '../styles/layout.css';
 
 function AppContent() {
   const { content } = useSiteContent();
-  
+
   const [activeSection, setActiveSection] = useState('home');
   const [headerHeight, setHeaderHeight] = useState(57);
+
   const changeSection = (section: string) => {
     setActiveSection(section);
     window.scrollTo(0, 0);
   };
-  export default function App() {
-  return (
-    <ContentProvider>
-      <AppContent />
-    </ContentProvider>
-  );
-}
 
   const renderSection = () => {
     switch (activeSection) {
       case 'home':
-        return <HeroSection onSectionChange={changeSection} />;
-      case 'about': return <PortfolioGrid {...content.about} />;
-      case 'skills': return <PortfolioGrid {...content.skills} />;
+        return (
+          <HeroSection onSectionChange={changeSection} />
+        );
+
+      case 'about':
+        return <PortfolioGrid {...content.about} />;
+
+      case 'skills':
+        return <PortfolioGrid {...content.skills} />;
+
       case 'contact':
         return <ContactSection />;
+
       default:
-        return <HeroSection onSectionChange={changeSection} />;
+        return (
+          <HeroSection onSectionChange={changeSection} />
+        );
     }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground" style={{ '--site-header-height': `${headerHeight}px` } as CSSProperties}>
-      <Header activeSection={activeSection} onSectionChange={changeSection} onHeightChange={setHeaderHeight} />
-      
-      <main data-section={activeSection} className={activeSection === 'home' ? '' : 'pt-20'}>
+    <div
+      className="min-h-screen bg-background text-foreground"
+      style={
+        {
+          '--site-header-height': `${headerHeight}px`,
+        } as CSSProperties
+      }
+    >
+      <Header
+        activeSection={activeSection}
+        onSectionChange={changeSection}
+        onHeightChange={setHeaderHeight}
+      />
+
+      <main
+        data-section={activeSection}
+        className={activeSection === 'home' ? '' : 'pt-20'}
+      >
         {renderSection()}
       </main>
-      
+
       {/* Footer */}
       <footer className="border-t border-primary/20 py-8 px-4">
         <div className="container mx-auto text-center">
           <p className="font-mono text-muted-foreground text-sm">
             {content.footer.copyright}
           </p>
+
           <p className="font-mono text-xs text-muted-foreground mt-2">
-            System.Status: <span className="text-primary">{content.footer.status}</span> | 
-            Last.Update: <span className="text-primary">{content.footer.lastUpdate}</span> |
-            Build.Version: <span className="text-primary">{content.footer.version}</span>
+            System.Status:{' '}
+            <span className="text-primary">
+              {content.footer.status}
+            </span>
+            {' | '}
+            Last.Update:{' '}
+            <span className="text-primary">
+              {content.footer.lastUpdate}
+            </span>
+            {' | '}
+            Build.Version:{' '}
+            <span className="text-primary">
+              {content.footer.version}
+            </span>
           </p>
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ContentProvider>
+      <AppContent />
+    </ContentProvider>
   );
 }
