@@ -1,0 +1,18 @@
+/* Geometry corrections only. Original theme, components and animation rules stay intact. */
+main[data-section="home"] > section {
+  /* Symmetric clearance preserves the original vertical centering on roomy screens.
+     On short/mobile screens it expands the section below the measured fixed header. */
+  padding-block: calc(var(--site-header-height, 4rem) + 1rem);
+  isolation: isolate;
+}
+
+main[data-section]:not([data-section="home"]) {
+  /* Retain the original pt-20 unless an expanded mobile header needs more room. */
+  padding-top: max(5rem, var(--site-header-height, 4rem));
+}
+
+[data-matrix-background] {
+  overflow: hidden;
+  contain: paint;
+  user-select: none;
+}

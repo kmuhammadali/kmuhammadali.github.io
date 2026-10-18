@@ -1,5 +1,6 @@
 import { siteContent } from '../../config/siteContent';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { getMatrixGrid } from './matrixGrid';
 import { Button } from './ui/button';
 import { ChevronDown, Code, Camera, Video } from 'lucide-react';
 
@@ -9,6 +10,33 @@ interface HeroSectionProps {
 
 export function HeroSection({ onSectionChange }: HeroSectionProps) {
   const [text, setText] = useState('');
+  const matrixRef = useRef<HTMLDivElement>(null);
+  const [matrixGrid, setMatrixGrid] = useState({ rows: 50, columns: 100 });
+
+  useLayoutEffect(() => {
+    const matrix = matrixRef.current;
+    if (!matrix) return;
+    const measure = () => {
+      const row = matrix.firstElementChild;
+      const cell = row?.firstElementChild;
+      if (!row || !cell) return;
+      const bounds = matrix.getBoundingClientRect();
+      const cellWidth = cell.getBoundingClientRect().width;
+      const cellHeight = row.getBoundingClientRect().height;
+      if (!bounds.width || !bounds.height || !cellWidth || !cellHeight) return;
+      const next = getMatrixGrid(bounds.width, bounds.height, cellWidth, cellHeight);
+      setMatrixGrid(previous => previous.rows === next.rows && previous.columns === next.columns ? previous : next);
+    };
+    measure();
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(measure);
+      observer.observe(matrix);
+      return () => observer.disconnect();
+    }
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
   const [showCursor, setShowCursor] = useState(true);
   
   const fullText = siteContent.home.typingText;
@@ -116,11 +144,11 @@ export function HeroSection({ onSectionChange }: HeroSectionProps) {
       </div>
       
       {/* Matrix-style background effect */}
-      <div className="absolute inset-0 pointer-events-none opacity-5">
-        <div className="text-primary font-mono text-xs leading-none overflow-hidden h-full">
-          {Array.from({ length: 50 }, (_, i) => (
+      <div data-matrix-background aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-5">
+        <div ref={matrixRef} className="text-primary font-mono text-xs leading-none overflow-hidden h-full">
+          {Array.from({ length: matrixGrid.rows }, (_, i) => (
             <div key={i} className="whitespace-nowrap">
-              {Array.from({ length: 100 }, (_, j) => (
+              {Array.from({ length: matrixGrid.columns }, (_, j) => (
                 <span key={j} className="inline-block w-3">
                   {Math.random() > 0.5 ? '1' : '0'}
                 </span>

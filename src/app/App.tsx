@@ -1,17 +1,23 @@
 import { siteContent } from '../config/siteContent';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { PortfolioGrid } from './components/PortfolioGrid';
 import { ContactSection } from './components/ContactSection';
+import '../styles/layout.css';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [headerHeight, setHeaderHeight] = useState(57);
+  const changeSection = (section: string) => {
+    setActiveSection(section);
+    window.scrollTo(0, 0);
+  };
 
   const renderSection = () => {
     switch (activeSection) {
       case 'home':
-        return <HeroSection onSectionChange={setActiveSection} />;
+        return <HeroSection onSectionChange={changeSection} />;
       case 'about':
         return <PortfolioGrid {...siteContent.about} />;
       case 'skills':
@@ -19,15 +25,15 @@ export default function App() {
       case 'contact':
         return <ContactSection />;
       default:
-        return <HeroSection onSectionChange={setActiveSection} />;
+        return <HeroSection onSectionChange={changeSection} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header activeSection={activeSection} onSectionChange={setActiveSection} />
+    <div className="min-h-screen bg-background text-foreground" style={{ '--site-header-height': `${headerHeight}px` } as CSSProperties}>
+      <Header activeSection={activeSection} onSectionChange={changeSection} onHeightChange={setHeaderHeight} />
       
-      <main className={activeSection === 'home' ? '' : 'pt-20'}>
+      <main data-section={activeSection} className={activeSection === 'home' ? '' : 'pt-20'}>
         {renderSection()}
       </main>
       

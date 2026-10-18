@@ -2,10 +2,10 @@
 export const siteContent = {
   name: 'root@muhammad-ali',
   navigation: [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'home', command: 'home.exe', label: 'Home' },
+    { id: 'about', command: 'about.sys', label: 'About' },
+    { id: 'skills', command: 'skills.mov', label: 'Skills' },
+    { id: 'contact', command: 'contact.sh', label: 'Contact' },
   ],
   home: {
     terminal: 'terminal.app',

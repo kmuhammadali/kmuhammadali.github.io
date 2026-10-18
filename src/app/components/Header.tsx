@@ -1,20 +1,37 @@
 import { siteContent } from '../../config/siteContent';
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { Terminal, Menu, X } from 'lucide-react';
 
 interface HeaderProps {
   activeSection: string;
+  onHeightChange?: (height: number) => void;
   onSectionChange: (section: string) => void;
 }
 
-export function Header({ activeSection, onSectionChange }: HeaderProps) {
+export function Header({ activeSection, onSectionChange, onHeightChange }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const headerRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header || !onHeightChange) return;
+    const measure = () => onHeightChange(header.getBoundingClientRect().height);
+    measure();
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(measure);
+      observer.observe(header);
+      return () => observer.disconnect();
+    }
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [onHeightChange]);
 
   const sections = siteContent.navigation;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black-deep/80 backdrop-blur-sm border-b border-primary/20">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 bg-black-deep/80 backdrop-blur-sm border-b border-primary/20">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -39,7 +56,7 @@ export function Header({ activeSection, onSectionChange }: HeaderProps) {
                   }
                 `}
               >
-                {section.label}
+                ./{section.command}
               </Button>
             ))}
           </nav>
@@ -78,7 +95,7 @@ export function Header({ activeSection, onSectionChange }: HeaderProps) {
                     }
                   `}
                 >
-                  {section.label}
+                  ./{section.command}
                 </Button>
               ))}
             </div>
