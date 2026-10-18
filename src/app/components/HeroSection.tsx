@@ -162,6 +162,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
+      </div>
       
       {/* Matrix-style background effect */}
       <div data-matrix-background aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-5">
