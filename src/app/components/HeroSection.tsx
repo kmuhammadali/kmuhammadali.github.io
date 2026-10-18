@@ -9,7 +9,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onSectionChange }: HeroSectionProps) {
-  const [text, setText] = useState('');
+  const [typedCount, setTypedCount] = useState(0);
   const matrixRef = useRef<HTMLDivElement>(null);
   const [matrixGrid, setMatrixGrid] = useState({ rows: 50, columns: 100 });
 
@@ -39,21 +39,33 @@ export function HeroSection({ onSectionChange }: HeroSectionProps) {
 
   const [showCursor, setShowCursor] = useState(true);
   
-  const fullText = siteContent.home.typingText;
   
-  useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
+const terminalLines = [
+  '$ whoami',
+  siteContent.home.role,
+  '$ ls -la portfolio/',
+  ...siteContent.home.directories,
+  '$ cat mission.txt',
+  ...siteContent.home.mission,
+  `$ echo "${siteContent.home.typingText}"`,
+];
 
-    return () => clearInterval(timer);
-  }, []);
+const fullText = terminalLines.join('\n');
+
+useEffect(() => {
+  let index = 0;
+
+  const timer = setInterval(() => {
+    index += 1;
+    setTypedCount(index);
+
+    if (index >= fullText.length) {
+      clearInterval(timer);
+    }
+  }, 45);
+
+  return () => clearInterval(timer);
+}, [fullText]);
 
   useEffect(() => {
     const cursorTimer = setInterval(() => {
@@ -76,31 +88,39 @@ export function HeroSection({ onSectionChange }: HeroSectionProps) {
               <span className="ml-4 font-mono text-sm text-muted-foreground">{siteContent.home.terminal}</span>
             </div>
             
-            <div className="text-left space-y-2 font-mono">
-              <div className="text-primary">
-                <span className="text-muted-foreground">$</span> whoami
-              </div>
-              <div className="text-green-dark">{siteContent.home.role}</div>
-              <div className="text-primary">
-                <span className="text-muted-foreground">$</span> ls -la portfolio/
-              </div>
-              <div className="text-green-dark">{siteContent.home.directories[0]}</div>
-              <div className="text-green-dark">{siteContent.home.directories[1]}</div>
-              <div className="text-green-dark">{siteContent.home.directories[2]}</div>
-              <div className="text-primary">
-                <span className="text-muted-foreground">$</span> cat mission.txt
-              </div>
-              <div className="text-green-dark">
-                {siteContent.home.mission[0]}
-                <br />
-                {siteContent.home.mission[1]}
-              </div>
-              <div className="text-primary">
-                <span className="text-muted-foreground">$</span> echo "{text}"
-                {showCursor && <span className="text-primary">_</span>}
-              </div>
-            </div>
-          </div>
+
+<div className="text-left space-y-2 font-mono">
+  {terminalLines.map((line, index) => {
+    const start = terminalLines
+      .slice(0, index)
+      .reduce((sum, item) => sum + item.length + 1, 0);
+
+    const visibleLength = Math.max(
+      0,
+      Math.min(line.length, typedCount - start)
+    );
+
+    if (typedCount <= start) return null;
+
+    const isCommand = line.startsWith('$ ');
+    const isActive =
+      typedCount >= start &&
+      typedCount <= start + line.length;
+
+    return (
+      <div
+        key={index}
+        className={isCommand ? 'text-primary' : 'text-green-dark'}
+      >
+        {line.slice(0, visibleLength)}
+        {isActive && showCursor && (
+          <span className="text-primary">_</span>
+        )}
+      </div>
+    );
+  })}
+</div>
+
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
