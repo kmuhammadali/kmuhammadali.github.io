@@ -86,3 +86,16 @@ TypeScript, API/client tests, SQLite CRUD/migration tests, frontend build and bo
 GitHub Pages already has custom domain `muhammad-ali.uz` and Actions as its source. CI for `d52da7c` passed. A private, ignored SQL backup was exported to `artifacts/portfolio-cms-before-deploy-20261020.sql` (SHA-256 `5074f66bd00c9d3835582dbba9c0fb5ff4773c3519af6a2d3046405f7d759829`). D1 Time Travel bookmark: `0000000c-00000000-0000510a-6685460fd8f903ecfd7dd7579fce735e`. Migration rehearsal against that export preserved every original column value: 3 settings, 4 pages, 1 skill, and empty projects/posts/media collections. No production migration or deployment has been performed. Refresh the backup if production records change before approval.
 
 Cloudflare CLI authentication permits Worker/D1 operations. Dashboard sign-in is still needed to confirm the existing Access application and policy; do not replace it with a broad allow/bypass rule. In **Zero Trust → Access → Applications**, locate the application protecting `portfolio-cms-api.kmuhammadali.workers.dev`, confirm its audience matches `ACCESS_AUD`, protect the whole hostname and retain the administrator allowlist. Under its CORS settings, allow the two origins listed above, credentials, methods GET/POST/PUT/PATCH/DELETE and headers Content-Type/If-Match/X-CMS-Request; allow OPTIONS preflight to reach the Worker. Production migration, both Worker deployments, frontend release/merge and temporary production CRUD verification require explicit approval.
+
+## Production checkpoint — 2026-10-20 (supersedes preparation status)
+
+The user approved the release. HTTP Only was confirmed enabled in the saved Access application. The existing Only Me policy and audience were retained. OPTIONS preflight is delegated to the Worker, which enforces exact allowed origins, methods and headers.
+
+- Fresh private backup: `artifacts/portfolio-cms-approved-release-20261020.sql`, SHA-256 `5074f66bd00c9d3835582dbba9c0fb5ff4773c3519af6a2d3046405f7d759829`.
+- Tracked migration `0001_cms_metadata.sql` applied successfully. All original columns/values were compared with the backup after migration: 3 settings, 4 pages, 1 skill; projects/posts/media remain empty.
+- Admin Worker deployed: version `cda6d4f1-db85-4b26-b3ec-577ee21c059d`.
+- Public Worker deployed: version `444df38f-9a95-4c88-a2af-cdf4fb84d621`.
+- Release STOPPED before merging into main or deploying Pages: after administrator OTP sign-in, `/api/admin/session` returns HTTP 503 with `Authentication service unavailable`. The Worker fails closed while its Access JWKS verification dependency is unavailable. The exact underlying fetch failure is not yet confirmed. Do not weaken or bypass JWT verification to proceed.
+- No temporary production CRUD records were created. Public Worker health is healthy. Production admin CRUD/publishing and frontend release remain pending. Telegram integration was not changed.
+
+Next: investigate the authentication-service failure with user approval, verify a successful signed-in session, then resume the approved Pages release and temporary CRUD checks. Do not reapply the migration or repeat completed Worker deployments unless a reviewed fix requires it.
