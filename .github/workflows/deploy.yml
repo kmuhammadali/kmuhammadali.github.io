@@ -60,6 +60,9 @@ jobs:
         env:
           WRANGLER_SEND_METRICS: false
 
+      - name: Test CMS in Workers runtime
+        run: npm run cms:runtime:test
+
       - name: Configure GitHub Pages
         if: github.ref_name == 'main'
         uses: actions/configure-pages@v5

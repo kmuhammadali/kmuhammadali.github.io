@@ -128,9 +128,11 @@ export default {
           throw new ApiError(503, "Invalid dashboard origin");
         const target = `${origin.origin}${pathname.startsWith("/assets/") ? pathname : "/admin/index.html"}`;
         const upstream = await fetch(target, {
-          redirect: "error",
+          redirect: "manual",
           signal: AbortSignal.timeout(8000),
         });
+        if (upstream.status >= 300 && upstream.status < 400)
+          throw new ApiError(503, "Dashboard origin redirected unexpectedly");
         const responseHeaders = new Headers(upstream.headers);
         responseHeaders.set("Cache-Control", "no-store");
         responseHeaders.set("X-Content-Type-Options", "nosniff");

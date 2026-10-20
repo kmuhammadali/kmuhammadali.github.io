@@ -78,7 +78,8 @@ export async function verifyAccessJwt(
     let response: Response;
     try {
       response = await fetch(`${issuer}/cdn-cgi/access/certs`, {
-        redirect: "error",
+        // Workers supports manual/follow only. Never follow a JWKS redirect.
+        redirect: "manual",
         signal: AbortSignal.timeout(5000),
       });
     } catch {

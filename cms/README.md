@@ -11,6 +11,7 @@ npm ci
 npm ci --prefix worker
 npm run typecheck
 npm test
+npm run cms:runtime:test
 npm run build
 npm run cms:admin:build
 npm run cms:public:build
@@ -99,3 +100,13 @@ The user approved the release. HTTP Only was confirmed enabled in the saved Acce
 - No temporary production CRUD records were created. Public Worker health is healthy. Production admin CRUD/publishing and frontend release remain pending. Telegram integration was not changed.
 
 Next: investigate the authentication-service failure with user approval, verify a successful signed-in session, then resume the approved Pages release and temporary CRUD checks. Do not reapply the migration or repeat completed Worker deployments unless a reviewed fix requires it.
+
+## Authentication fix verified — 2026-10-20
+
+Root cause: Workers does not implement `redirect: "error"`; it throws before the JWKS request is sent. This was reproduced in local workerd. The same unsupported option affected the protected static dashboard proxy. Both calls now use `manual`. JWKS non-2xx responses fail closed, and dashboard 3xx responses are explicitly rejected without forwarding Location. Signature, issuer, audience, lifetime checks and the existing Access policy remain unchanged.
+
+The Admin Worker fix was deployed as version `5916d999-a829-42ab-87f4-f0e84dd9886a`. The existing authenticated production browser session now returns `{ "authenticated": true, "service": "portfolio-cms-api" }`. No D1 writes or Telegram changes were made during this investigation.
+
+`npm run cms:runtime:test` executes the bundled Worker in workerd, verifies signed and forged JWTs, rejects JWKS failures/redirects and dashboard redirects, and checks that no cookies/assertions are forwarded upstream. This check uses existing Worker tooling and now runs in branch CI; the Node tests alone did not catch the unsupported runtime option.
+
+Pages investigation: the custom domain, Actions build source, main-branch deployment and HTTPS setting are correct. The apex resolves to GitHub Pages; the homepage and its referenced JS/CSS assets returned 200, and the browser rendered the original terminal and three cards. The reported root-page 404 could not be reproduced; its historical cause is unconfirmed, so DNS/Pages settings were not changed. `/admin/` is 404 because current production main has no admin entry. The feature build includes `dist/admin/index.html`; publishing that reviewed build is the remaining frontend fix. No main merge or Pages release was performed during this investigation.

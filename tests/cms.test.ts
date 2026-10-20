@@ -457,7 +457,7 @@ test("same-origin dashboard proxy verifies Access and never forwards credentials
         return Response.json({ keys: [keys.jwk] });
       assert.equal(url, `${origin}/admin/index.html`);
       assert.equal(options?.headers, undefined);
-      assert.equal(options?.redirect, "error");
+      assert.equal(options?.redirect, "manual");
       staticCalls++;
       return new Response("<!doctype html><title>CMS</title>", {
         headers: { "Content-Type": "text/html" },
