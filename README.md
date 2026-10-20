@@ -82,3 +82,7 @@ Rasmiy qo‘llanmalar: [Vite Pages deploy](https://vite.dev/guide/static-deploy.
 GitHub Pages Actions deploy usuliga o‘tkazildi; avvalgi `muhammad-ali.uz` redirecti olib tashlandi. Oldingi `CNAME` fayli `legacy/CNAME` ichida tarixiy nusxa sifatida qolgan. Mahalliy frontend/Worker typecheck, build, test va Worker dry-run bajarildi. Jonli forma orqali bitta `Portfolio deployment test` xabari yuborildi: Telegram tasdig‘i olindi, success statusi ko‘rsatildi va maydonlar tozalandi. Status logi eng yangi natijani avtomatik ko‘rsatadi.
 
 Jonli saytda 1280×900 desktop va 390×844 mobil ko‘rinish, uch karta, mobil menyu, kontakt forma, assetlar, responsive Matrix kataklari, cursor/bounce animatsiyalari va 0.3s o‘tishlar tekshirildi. CORS ruxsat etilgan origin uchun 204, begona origin uchun 403 qaytardi. Terminal navigatsiya (`./home.exe`, `./about.sys`, `./skills.mov`, `./contact.sh`) asl tugma klasslari bilan tiklandi. Header haqiqiy balandligi o‘lchanadi: mobil ekran va ochiq menyuda terminal uning ostida 1rem masofa bilan to‘liq ko‘rinadi; keng ekranlarda asl markazlash saqlanadi. Matrix asl shrift, katak o‘lchami, 5% opacity va taymerlari bilan Home o‘lchamiga mos to‘ldiriladi.
+
+## Admin CMS (feature branch)
+
+CMS kodi `feature/admin-cms` branch’ida. Dashboard: `/admin/`. API shartnomasi, lokal tekshiruv va tasdiqdan keyingi Cloudflare/D1 deploy qadamlari: [CMS qo‘llanmasi](cms/README.md). Ushbu branch `main`’ga qo‘shilmaydi va production deploy bajarmaydi.

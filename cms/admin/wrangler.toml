@@ -1,0 +1,16 @@
+name = "portfolio-cms-api"
+main = "index.ts"
+compatibility_date = "2026-10-18"
+workers_dev = true
+
+[vars]
+ACCESS_TEAM_DOMAIN = "https://throbbing-math-15ad.cloudflareaccess.com"
+ACCESS_AUD = "c8652226541e31e0a0ec2062db45c7af73270b9ad67f5317477a2d40bfc8b56f"
+ALLOWED_ORIGINS = "https://kmuhammadali.github.io"
+DASHBOARD_ORIGIN = "https://kmuhammadali.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-cms-db"
+database_id = "d814a960-3a01-4464-abe6-b40b2c483687"
+migrations_dir = "../migrations"

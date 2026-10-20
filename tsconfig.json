@@ -29,6 +29,7 @@
     "src",
     "vite.config.ts",
     "worker/src",
-    "tests"
+    "tests",
+    "cms"
   ]
 }

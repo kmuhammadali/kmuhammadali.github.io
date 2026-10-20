@@ -1,0 +1,276 @@
+/* All dashboard styles are scoped; the public design and animation CSS stay unchanged. */
+.cms-root {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Courier New", monospace;
+}
+.cms-root *,
+.cms-root *::before,
+.cms-root *::after {
+  box-sizing: border-box;
+}
+.cms-root button,
+.cms-root input,
+.cms-root textarea,
+.cms-root select {
+  font: inherit;
+}
+.cms-root button,
+.cms-root .cms-primary {
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  color: var(--primary);
+  background: var(--black-light);
+  cursor: pointer;
+  text-decoration: none;
+}
+.cms-root button:hover,
+.cms-root a:hover {
+  background: var(--accent);
+}
+.cms-root button:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+.cms-root :focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+.cms-root .cms-primary {
+  color: #000;
+  background: var(--primary);
+}
+.cms-root .cms-danger {
+  border-color: var(--destructive);
+  color: var(--destructive);
+}
+.cms-header {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--primary);
+}
+.cms-layout {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  max-width: 1500px;
+  margin: auto;
+}
+.cms-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid var(--border);
+  align-self: start;
+}
+.cms-nav button {
+  text-align: left;
+}
+.cms-nav button[aria-current="page"],
+.cms-nav button[aria-current="page"]:hover {
+  background: var(--primary);
+  color: #000;
+}
+.cms-main {
+  padding: 1.5rem;
+  min-width: 0;
+}
+.cms-root h1 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem;
+}
+.cms-root h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.cms-root p {
+  margin: 0.8rem 0;
+}
+.cms-panel {
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--black-light);
+  padding: 1.3rem;
+  margin: 1.2rem 0;
+  overflow-wrap: anywhere;
+}
+.cms-toolbar,
+.cms-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+.cms-actions {
+  justify-content: flex-start;
+}
+.cms-fields {
+  display: grid;
+  gap: 1rem;
+}
+.cms-field {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.cms-field > span {
+  text-transform: capitalize;
+}
+.cms-field input,
+.cms-field select,
+.cms-field textarea,
+.cms-root select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem;
+  border: 1px solid var(--green-dark);
+  background: var(--background);
+  border-radius: var(--radius);
+  color: var(--foreground);
+}
+.cms-field textarea {
+  resize: vertical;
+}
+.cms-checkbox {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.cms-checkbox input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--primary);
+}
+.cms-editor {
+  border: 0;
+  min-width: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.cms-group {
+  border: 1px solid var(--green-dark);
+  padding: 1rem;
+  min-width: 0;
+  margin-top: 0.7rem;
+}
+.cms-group legend {
+  padding: 0 0.5rem;
+  text-transform: capitalize;
+}
+.cms-array-item {
+  display: grid;
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--green-dark);
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+.cms-save {
+  margin-top: 1.5rem;
+  position: sticky;
+  bottom: 0;
+  background: var(--black-light);
+  padding: 1rem 0;
+  z-index: 1;
+}
+.cms-table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+.cms-root table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.cms-root th,
+.cms-root td {
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--green-dark);
+  text-align: left;
+}
+.cms-root th {
+  white-space: nowrap;
+}
+.cms-error {
+  padding: 1rem;
+  border: 1px solid var(--destructive);
+  color: var(--destructive);
+  overflow-wrap: anywhere;
+}
+.cms-error a {
+  display: inline-block;
+  margin-left: 0.5rem;
+  text-decoration: underline;
+}
+.cms-notice {
+  padding: 1rem;
+  border: 1px solid var(--primary);
+}
+.cms-preview {
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+}
+.cms-confirm {
+  position: fixed;
+  z-index: 100;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 32rem);
+  background: var(--background);
+  padding: 1.5rem;
+  border: 2px solid var(--destructive);
+  box-shadow: 0 0 0 100vmax #000a;
+}
+.cms-signin {
+  max-width: 42rem;
+  padding: 3rem 1.5rem;
+  margin: auto;
+  display: grid;
+  gap: 1rem;
+}
+@media (max-width: 767px) {
+  .cms-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cms-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--green-dark);
+    padding: 1rem;
+  }
+  .cms-nav button {
+    flex-shrink: 0;
+  }
+  .cms-main {
+    padding: 1rem;
+  }
+  .cms-panel {
+    padding: 1rem;
+  }
+  .cms-header {
+    padding: 1rem;
+  }
+}
+
+.cms-root .cms-primary:hover {
+  background: var(--green-dark);
+  color: #000;
+}
+.cms-root table {
+  min-width: 38rem;
+}
+.cms-root td {
+  max-width: 18rem;
+}
+.cms-root td button {
+  white-space: nowrap;
+}

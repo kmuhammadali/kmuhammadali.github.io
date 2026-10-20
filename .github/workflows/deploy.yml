@@ -49,6 +49,14 @@ jobs:
         env:
           VITE_CONTACT_API_URL: ${{ vars.VITE_CONTACT_API_URL }}
 
+      - name: Install Worker tooling
+        run: npm ci --prefix worker
+
+      - name: Validate CMS Worker bundles (dry run only)
+        run: npm run cms:admin:build && npm run cms:public:build
+        env:
+          WRANGLER_SEND_METRICS: false
+
       - name: Configure GitHub Pages
         if: github.ref_name == 'main'
         uses: actions/configure-pages@v5
