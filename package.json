@@ -8,7 +8,11 @@
     "dev": "vite",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "test": "node --experimental-strip-types --test tests/*.test.ts"
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "cms:admin:check": "tsc --noEmit",
+    "cms:runtime:test": "node --experimental-strip-types --test tests/cms-runtime.test.mjs",
+    "cms:admin:build": "worker/node_modules/.bin/wrangler deploy --config cms/admin/wrangler.toml --dry-run --outdir artifacts/cms-admin",
+    "cms:public:build": "worker/node_modules/.bin/wrangler deploy --config cms/public/wrangler.toml --dry-run --outdir artifacts/cms-public"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

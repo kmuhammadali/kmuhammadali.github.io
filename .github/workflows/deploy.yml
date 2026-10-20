@@ -48,6 +48,20 @@ jobs:
         run: npm run build
         env:
           VITE_CONTACT_API_URL: ${{ vars.VITE_CONTACT_API_URL }}
+          VITE_PUBLIC_API_URL: ${{ vars.VITE_PUBLIC_API_URL }}
+          VITE_ADMIN_API_URL: ${{ vars.VITE_ADMIN_API_URL }}
+          VITE_SITE_URL: ${{ vars.VITE_SITE_URL || 'https://muhammad-ali.uz' }}
+
+      - name: Install Worker tooling
+        run: npm ci --prefix worker
+
+      - name: Validate CMS Worker bundles (dry run only)
+        run: npm run cms:admin:build && npm run cms:public:build
+        env:
+          WRANGLER_SEND_METRICS: false
+
+      - name: Test CMS in Workers runtime
+        run: npm run cms:runtime:test
 
       - name: Configure GitHub Pages
         if: github.ref_name == 'main'

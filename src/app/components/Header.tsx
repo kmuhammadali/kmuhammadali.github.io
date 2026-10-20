@@ -1,4 +1,4 @@
-import { siteContent } from '../../config/siteContent';
+import { useSiteContent } from '../../context/ContentProvider';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { Terminal, Menu, X } from 'lucide-react';
@@ -10,6 +10,7 @@ interface HeaderProps {
 }
 
 export function Header({ activeSection, onSectionChange, onHeightChange }: HeaderProps) {
+  const { content } = useSiteContent();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
@@ -28,7 +29,7 @@ export function Header({ activeSection, onSectionChange, onHeightChange }: Heade
     return () => window.removeEventListener('resize', measure);
   }, [onHeightChange]);
 
-  const sections = siteContent.navigation;
+  const sections = content.navigation;
 
   return (
     <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 bg-black-deep/80 backdrop-blur-sm border-b border-primary/20">
@@ -46,7 +47,7 @@ export function Header({ activeSection, onSectionChange, onHeightChange }: Heade
 >
   <Terminal className="w-6 h-6 text-primary" />
   <span className="font-mono text-primary terminal-cursor">
-    {siteContent.name}
+    {content.name}
   </span>
 </button>
 

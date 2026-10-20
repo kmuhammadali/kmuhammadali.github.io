@@ -1,0 +1,10 @@
+name = "portfolio-public-api"
+main = "index.ts"
+compatibility_date = "2026-10-18"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-cms-db"
+database_id = "d814a960-3a01-4464-abe6-b40b2c483687"
+migrations_dir = "../migrations"
