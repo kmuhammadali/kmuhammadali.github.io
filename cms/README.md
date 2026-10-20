@@ -65,7 +65,7 @@ The existing schema and deployed Worker code were inspected read-only. No produc
    It adds publication/order fields to page content, ordering to posts, and publication/order/alt-text/update metadata to media. Existing records, IDs, content and original columns are retained. Existing pages/skills keep their publication state; media defaults to unpublished. Do not re-run the raw ALTER statements manually.
 
 3. Verify the existing Cloudflare Access application/policy restricts the **entire Admin API hostname**, including `/admin/*` and `/assets/*`, to the intended administrators. Keep `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` aligned with that application. Both are public identifiers, not secrets. Configure Access CORS to let OPTIONS preflight reach the Worker; allow the exact frontend origin, credentials, methods GET/POST/PUT/PATCH/DELETE and headers Content-Type/If-Match/X-CMS-Request. The Worker independently enforces CORS, CSRF protection and JWT verification.
-4. Set `ALLOWED_ORIGINS` to exact frontend origins, without trailing slashes. Keep `DASHBOARD_ORIGIN` set to the approved frontend HTTPS origin. No Telegram secrets belong in either CMS Worker or frontend.
+4. The reviewed configuration allows only `https://muhammad-ali.uz` and the existing `https://kmuhammadali.github.io` origin. `DASHBOARD_ORIGIN` is `https://muhammad-ali.uz`. Set repository variable `VITE_SITE_URL=https://muhammad-ali.uz`; retain the existing `VITE_CONTACT_API_URL`. The workflow also accepts optional `VITE_PUBLIC_API_URL` and `VITE_ADMIN_API_URL` overrides. No Telegram secrets belong in either CMS Worker or frontend.
 5. After approval, independently deploy the two Workers:
 
    ```sh
@@ -74,9 +74,15 @@ The existing schema and deployed Worker code were inspected read-only. No produc
    ```
 
 6. An independently approved frontend release must publish the new Vite build, including `admin/index.html` and its assets, to `DASHBOARD_ORIGIN`. **This task does not merge into main or enable feature-branch production deployment.** The existing Pages workflow still deploys only `main`; feature-branch CI only validates.
-7. Open `https://kmuhammadali.github.io/admin/`. If cross-site Access cookies are blocked, the sign-in link opens `https://portfolio-cms-api.kmuhammadali.workers.dev/admin/`. This same-origin, JWT-protected dashboard proxies only the approved static HTML/assets and never forwards Access credentials to GitHub. It requires step 6's static files to exist.
+7. Open `https://muhammad-ali.uz/admin/`. If cross-site Access cookies are blocked, the sign-in link opens `https://portfolio-cms-api.kmuhammadali.workers.dev/admin/`. This same-origin, JWT-protected dashboard proxies only the approved static HTML/assets and never forwards Access credentials to GitHub. It requires step 6's static files to exist.
 8. Verify sign-in, a temporary draft, publication/unpublication, ordering and deletion after the approved deployment. Check the public API and website refresh. Leave existing Telegram delivery settings intact.
 
 ## Verification performed during implementation
 
 TypeScript, API/client tests, SQLite CRUD/migration tests, frontend build and both Worker dry-run builds were executed. Browser tests used an isolated local API with ephemeral signed test JWTs, never the production database: Home edits appeared publicly; a skill was created, published, unpublished and deleted; media validation preserved inputs. Dashboard editors and mobile layout were checked. Production Access sign-in and production CRUD remain untested until deployment is approved.
+
+## Deployment preparation — 2026-10-20
+
+GitHub Pages already has custom domain `muhammad-ali.uz` and Actions as its source. CI for `d52da7c` passed. A private, ignored SQL backup was exported to `artifacts/portfolio-cms-before-deploy-20261020.sql` (SHA-256 `5074f66bd00c9d3835582dbba9c0fb5ff4773c3519af6a2d3046405f7d759829`). D1 Time Travel bookmark: `0000000c-00000000-0000510a-6685460fd8f903ecfd7dd7579fce735e`. Migration rehearsal against that export preserved every original column value: 3 settings, 4 pages, 1 skill, and empty projects/posts/media collections. No production migration or deployment has been performed. Refresh the backup if production records change before approval.
+
+Cloudflare CLI authentication permits Worker/D1 operations. Dashboard sign-in is still needed to confirm the existing Access application and policy; do not replace it with a broad allow/bypass rule. In **Zero Trust → Access → Applications**, locate the application protecting `portfolio-cms-api.kmuhammadali.workers.dev`, confirm its audience matches `ACCESS_AUD`, protect the whole hostname and retain the administrator allowlist. Under its CORS settings, allow the two origins listed above, credentials, methods GET/POST/PUT/PATCH/DELETE and headers Content-Type/If-Match/X-CMS-Request; allow OPTIONS preflight to reach the Worker. Production migration, both Worker deployments, frontend release/merge and temporary production CRUD verification require explicit approval.
