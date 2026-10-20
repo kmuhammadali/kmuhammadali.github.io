@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Page not found</title>
+<script>
+// GitHub Pages cannot rewrite SPA routes. Reload the root shell, then let React
+// restore the canonical article URL after its relative assets have loaded.
+const match = /^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/.exec(location.pathname);
+if (match) location.replace('/?blog=' + encodeURIComponent(match[1]) + location.hash);
+</script></head><body style="background:#0a0a0a;color:#00ff41;font-family:monospace"><p>Page not found. <a href="/" style="color:inherit">Return home</a></p></body></html>

@@ -65,9 +65,9 @@ export const siteContent = {
     href: 'https://github.com/kmuhammadali'
   },
   {
-    label: 'linkedin.com',
-    value: 'muhammadali-ai',
-    href: 'https://www.linkedin.com/in/muhammadali-ai/'
+    label: 'Telegram',
+    value: '@kmuhammadali',
+    href: 'https://t.me/kmuhammadali'
   },
       { label: 'location.geo', value: 'Namangan, Uzbekistan', href: '' },
     ],

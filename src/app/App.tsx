@@ -1,5 +1,5 @@
 
-import { useState, type CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import {
   ContentProvider,
   useSiteContent,
@@ -9,25 +9,46 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { PortfolioGrid } from './components/PortfolioGrid';
 import { ContactSection } from './components/ContactSection';
+import { BlogArticle } from './components/BlogArticle';
+import { blogPath, blogSlug } from './blogRouting';
 
 import '../styles/layout.css';
 
 function AppContent() {
   const { content } = useSiteContent();
 
+  const [articleSlug, setArticleSlug] = useState(() => blogSlug(new URL(window.location.href)));
+  useEffect(() => {
+    // Keep the tab icon rooted at its loaded asset URL when pushState changes paths.
+    const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (icon) icon.setAttribute('href', icon.href);
+    const slug = blogSlug(new URL(window.location.href));
+    if (slug && window.location.search.includes('blog=')) window.history.replaceState(null, '', blogPath(slug) + window.location.hash);
+    const back = () => { setArticleSlug(blogSlug(new URL(window.location.href))); window.scrollTo(0, 0); };
+    window.addEventListener('popstate', back);
+    return () => window.removeEventListener('popstate', back);
+  }, []);
+  function openPost(slug: string) {
+    window.history.pushState(null, '', blogPath(slug));
+    setArticleSlug(slug); window.scrollTo(0, 0);
+  }
+
   const [activeSection, setActiveSection] = useState('home');
   const [headerHeight, setHeaderHeight] = useState(57);
 
   const changeSection = (section: string) => {
+    if (articleSlug) window.history.pushState(null, '', '/');
+    setArticleSlug(null);
     setActiveSection(section);
     window.scrollTo(0, 0);
   };
 
   const renderSection = () => {
+    if (articleSlug) return <BlogArticle slug={articleSlug} onHome={() => changeSection('home')} />;
     switch (activeSection) {
       case 'home':
         return (
-          <HeroSection onSectionChange={changeSection} />
+          <HeroSection onSectionChange={changeSection} onOpenPost={openPost} />
         );
 
       case 'about':
@@ -41,7 +62,7 @@ function AppContent() {
 
       default:
         return (
-          <HeroSection onSectionChange={changeSection} />
+          <HeroSection onSectionChange={changeSection} onOpenPost={openPost} />
         );
     }
   };
@@ -63,7 +84,7 @@ function AppContent() {
 
       <main
         data-section={activeSection}
-        className={activeSection === 'home' ? '' : 'pt-20'}
+        className={activeSection === 'home' && !articleSlug ? '' : 'pt-20'}
       >
         {renderSection()}
       </main>

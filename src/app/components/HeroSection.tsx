@@ -1,18 +1,20 @@
 import { useSiteContent } from '../../context/ContentProvider';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getMatrixGrid } from './matrixGrid';
+import { useTerminalPlayback } from './useTerminalPlayback';
+import { BlogSection } from './BlogSection';
 import { Button } from './ui/button';
-import { ChevronDown, Code, Camera, Video } from 'lucide-react';
+import { ChevronDown, Code, Terminal, Mail } from 'lucide-react';
 
 interface HeroSectionProps {
   onSectionChange: (section: string) => void;
+  onOpenPost: (slug: string) => void;
 }
 
-export function HeroSection({ onSectionChange }: HeroSectionProps) {
-  const { content } = useSiteContent();
+export function HeroSection({ onSectionChange, onOpenPost }: HeroSectionProps) {
+  const { content, isLoading } = useSiteContent();
   const home = content.home;
   
-  const [typedCount, setTypedCount] = useState(0);
   const matrixRef = useRef<HTMLDivElement>(null);
   const [matrixGrid, setMatrixGrid] = useState({ rows: 50, columns: 100 });
 
@@ -53,23 +55,7 @@ const terminalLines = [
   `$ echo "${home.typingText}"`,
 ];
 
-const fullText = terminalLines.join('\n');
-
-useEffect(() => {
-  let index = 0;
-  setTypedCount(0);
-
-  const timer = setInterval(() => {
-    index += 1;
-    setTypedCount(index);
-
-    if (index >= fullText.length) {
-      clearInterval(timer);
-    }
-  }, 45);
-
-  return () => clearInterval(timer);
-}, [fullText]);
+const frame = useTerminalPlayback(terminalLines, !isLoading);
 
   useEffect(() => {
     const cursorTimer = setInterval(() => {
@@ -96,29 +82,13 @@ useEffect(() => {
             </div>
 
             <div className="text-left space-y-2 font-mono">
-              {terminalLines.map((line, index) => {
-                const start = terminalLines
-                  .slice(0, index)
-                  .reduce((sum, item) => sum + item.length + 1, 0);
-
-                const visibleLength = Math.max(
-                  0,
-                  Math.min(line.length, typedCount - start)
-                );
-
-                if (typedCount <= start) return null;
-
-                const isCommand = line.startsWith('$ ');
-                const isActive =
-                  typedCount >= start &&
-                  typedCount <= start + line.length;
-
+              {frame.map(({ text, isCommand, isActive }, index) => {
                 return (
                   <div
                     key={index}
                     className={isCommand ? 'text-primary' : 'text-green-dark'}
                   >
-                    {line.slice(0, visibleLength)}
+                    {text}
                     {isActive && showCursor && (
                       <span className="text-primary">_</span>
                     )}
@@ -127,6 +97,8 @@ useEffect(() => {
               })}
             </div>
           </div>
+
+          <BlogSection onOpenPost={onOpenPost} />
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -145,7 +117,7 @@ useEffect(() => {
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
               variant="outline"
             >
-              <Video className="w-8 h-8" />
+              <Terminal className="w-8 h-8" />
               <span>{home.cards[1].title}</span>
               <span className="text-xs text-muted-foreground">{home.cards[1].description}</span>
             </Button>
@@ -155,7 +127,7 @@ useEffect(() => {
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
               variant="outline"
             >
-              <Camera className="w-8 h-8" />
+              <Mail className="w-8 h-8" />
               <span>{home.cards[2].title}</span>
               <span className="text-xs text-muted-foreground">{home.cards[2].description}</span>
             </Button>

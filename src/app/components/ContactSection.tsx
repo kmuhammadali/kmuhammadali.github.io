@@ -5,7 +5,8 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
-import { Mail, Github, Linkedin, Terminal, Send, MapPin } from 'lucide-react';
+import { Mail, Github, Terminal, Send, MapPin } from 'lucide-react';
+import { TelegramIcon } from './TelegramIcon';
 
 export function ContactSection() {
   const { content: siteData } = useSiteContent();
@@ -59,7 +60,7 @@ export function ContactSection() {
     }
   };
 
-  const icons = [Mail, Github, Linkedin, MapPin];
+  const icons = [Mail, Github, TelegramIcon, MapPin];
   const contactLinks = content.links.map((link, index) => {
     const Icon = icons[index];
     return { ...link, icon: <Icon className="w-5 h-5" /> };

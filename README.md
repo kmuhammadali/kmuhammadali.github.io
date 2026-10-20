@@ -86,3 +86,9 @@ Jonli saytda 1280×900 desktop va 390×844 mobil ko‘rinish, uch karta, mobil m
 ## Admin CMS (feature branch)
 
 CMS kodi `feature/admin-cms` branch’ida. Dashboard: `/admin/`. API shartnomasi, lokal tekshiruv va tasdiqdan keyingi Cloudflare/D1 deploy qadamlari: [CMS qo‘llanmasi](cms/README.md). Ushbu branch `main`’ga qo‘shilmaydi va production deploy bajarmaydi.
+
+## Blog
+
+CMS’dagi **Posts** bo‘limida maqola yarating va `published` holatini tanlang. Bosh sahifa eng yangi maqolalarni bittadan, raqamli sahifalash bilan ko‘rsatadi. To‘liq matn `/blog/:slug` manzilida ochiladi; matn HTML sifatida bajarilmaydi. Rasm ixtiyoriy, sana va havolani nusxalash mavjud. Ko‘rishlar hisoblagichi qo‘shilmagan.
+
+GitHub Pages uchun `public/404.html` to‘g‘ridan-to‘g‘ri maqola manzilini ildiz sahifaga xavfsiz yo‘naltiradi; ilova yuklangach maqola URL’ini tiklaydi. Shuning uchun yangi e’lon qilingan maqolalar uchun alohida build talab qilinmaydi. `/admin/` yo‘li bu fallback’dan foydalanmaydi.
