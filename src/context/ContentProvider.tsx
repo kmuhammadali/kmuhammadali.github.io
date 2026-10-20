@@ -51,7 +51,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     };
   }, [refresh]);
   useEffect(() => {
-    document.title = content.name;
+    document.title = "Muhammad Ali";
   }, [content.name]);
   return (
     <ContentContext.Provider value={{ content, isLoading, error, refresh }}>
