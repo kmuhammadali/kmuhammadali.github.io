@@ -6,6 +6,11 @@ main[data-section="home"] > section {
   isolation: isolate;
 }
 
+/* The fixed header requires top clearance, but adds no space below the end marker. */
+main[data-section="home"] > section.matrix-bg {
+  padding-bottom: 1rem;
+}
+
 main[data-section]:not([data-section="home"]) {
   /* Retain the original pt-20 unless an expanded mobile header needs more room. */
   padding-top: max(5rem, var(--site-header-height, 4rem));

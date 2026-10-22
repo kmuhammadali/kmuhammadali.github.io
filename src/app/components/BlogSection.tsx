@@ -2,6 +2,7 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import { getPublishedPosts, type PostSummary } from '../../config/postsApi';
 import { blogPath } from '../blogRouting';
 import { blogPage } from '../blogPagination';
+import { publicationDate } from '../publicationDate';
 import { Button } from './ui/button';
 import { PostCover } from './PostCover';
 export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void }) {
@@ -39,22 +40,27 @@ export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void
         </div>
       ) : <>
         <div className="space-y-6">
-          {visible.posts.map((post, index) => (
-            <div key={post.id} className="cyber-border bg-black-light/50 rounded-lg p-6">
+          {visible.posts.map((post, index) => {
+            const date = publicationDate(post.published_at);
+            return (
+            <a key={post.id} href={blogPath(post.slug)} onClick={event => open(event, post.slug)} aria-label={`Read ${post.title}`}
+              className="cyber-border bg-black-light/50 rounded-lg p-6 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
               {index === 0 && heading}
               <article className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center min-w-0">
                 <div className="min-w-0">
                   <h3 className="font-mono text-primary text-xl mb-3 break-words">
-                    <a href={blogPath(post.slug)} onClick={event => open(event, post.slug)} className="hover:underline focus-visible:outline focus-visible:outline-primary">{post.title}</a>
+                    <span className="hover:underline">{post.title}</span>
                   </h3>
+                  {date.dateTime ? <time dateTime={date.dateTime} className="block font-mono text-muted-foreground text-xs mb-3">{date.label}</time>
+                    : <span className="block font-mono text-muted-foreground text-xs mb-3">{date.label}</span>}
                   <p className="font-mono text-muted-foreground text-sm whitespace-pre-wrap break-words">{post.excerpt}</p>
                 </div>
-                <a href={blogPath(post.slug)} onClick={event => open(event, post.slug)} aria-label={`Read ${post.title}`} className="block focus-visible:outline focus-visible:outline-primary">
+                <div className="min-w-0">
                   <PostCover key={post.cover_image_url} url={post.cover_image_url} title={post.title} />
-                </a>
+                </div>
               </article>
-            </div>
-          ))}
+            </a>
+          );})}
         </div>
         {visible.pageCount > 1 && (
           <nav aria-label="Blog pagination" className="flex flex-wrap justify-center gap-2 mt-6">

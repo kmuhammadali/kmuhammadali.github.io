@@ -20,7 +20,7 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
       const unchangedClasses = (expected as string[])
         .map(className => className === 'flex flex-col items-center space-y-2 text-primary animate-bounce'
           ? 'flex flex-col items-center space-y-2 text-primary' : className)
-        .filter(className => className !== 'w-5 h-5')
+        .filter(className => !['w-5 h-5', 'font-mono text-sm'].includes(className))
         .filter(
         className => ![
           'text-primary',
@@ -39,7 +39,7 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
       );
 
       assert.equal(siteContent.home.scroll, '// END OF PAGE');
-      assert.ok(source.includes('{siteContent.home.scroll}'));
+      assert.ok(source.includes('<TextScramble text={siteContent.home.scroll} />'));
       assert.ok(!source.includes('ChevronDown') && !source.includes('animate-bounce'));
       assert.ok(source.includes("isCommand ? 'text-primary' : 'text-green-dark'"));
     } else {

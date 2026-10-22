@@ -6,6 +6,8 @@ import { terminalFrame, terminalLength } from '../src/app/components/terminalPla
 import { getPublishedPosts, getPublishedPost, PostNotFound } from '../src/config/postsApi.ts';
 import { blogSlug, blogPath } from '../src/app/blogRouting.ts';
 import { blogPage } from '../src/app/blogPagination.ts';
+import { publicationDate } from '../src/app/publicationDate.ts';
+import { endMarkerFrame, SCRAMBLE_CYCLE_MS, SCRAMBLE_HOLD_MS } from '../src/app/components/scrambleFrames.ts';
 import { pageTitle } from '../src/config/pageTitle.ts';
 
 test('terminal types commands only, reveals complete outputs immediately, and ends with an active final command', () => {
@@ -64,24 +66,50 @@ test('GitHub Pages direct article fallback uses a fixed same-origin root and res
 });
 
 
-test('blog pages contain two ordered posts, clamp after shrinking, and hide pagination for zero/one/two posts', () => {
-  const posts = ['newest', 'second', 'third', 'fourth', 'oldest'];
-  for (const [page, expected] of [[0, posts.slice(0, 2)], [1, posts.slice(2, 4)], [2, posts.slice(4)]] as const) {
+test('blog pages show three ordered posts and hide pagination for up to three posts', () => {
+  const posts = ['newest', 'second', 'third', 'fourth', 'fifth', 'sixth', 'oldest'];
+  for (const [page, expected] of [[0, posts.slice(0, 3)], [1, posts.slice(3, 6)], [2, posts.slice(6)]] as const) {
     const result = blogPage(posts, page);
     assert.deepEqual(result.posts, expected);
     assert.equal(result.pageCount, 3);
   }
   assert.deepEqual(blogPage(posts, 99).posts, ['oldest']);
-  assert.deepEqual(blogPage(posts, -1).posts, ['newest', 'second']);
+  assert.deepEqual(blogPage(posts, -1).posts, posts.slice(0, 3));
   assert.deepEqual(blogPage([], 2), { page: 0, pageCount: 0, posts: [] });
-  for (const count of [1, 2]) {
+  for (const count of [1, 2, 3]) {
     const result = blogPage(posts.slice(0, count), 2);
     assert.equal(result.pageCount, 1);
     assert.equal(result.page, 0);
     assert.equal(result.posts.length, count);
   }
-  assert.equal(blogPage(posts.slice(0, 3), 0).pageCount, 2);
-  assert.deepEqual(posts, ['newest', 'second', 'third', 'fourth', 'oldest']);
+  assert.equal(blogPage(posts.slice(0, 4), 0).pageCount, 2);
+  assert.deepEqual(posts, ['newest', 'second', 'third', 'fourth', 'fifth', 'sixth', 'oldest']);
+});
+
+test('publication dates are readable, timezone-stable and gracefully handle absent/invalid dates', () => {
+  assert.deepEqual(publicationDate('2026-10-22T00:30:00Z'), { label: 'October 22, 2026', dateTime: '2026-10-22T00:30:00Z' });
+  assert.equal(publicationDate('2026-10-22T23:30:00-05:00').label, 'October 23, 2026');
+  for (const value of [null, '', 'not-a-date']) {
+    assert.deepEqual(publicationDate(value), { label: 'Publication date unavailable', dateTime: undefined });
+  }
+});
+
+test('end marker scramble loops, preserves spaces and width, and returns to its original text', () => {
+  const label = '// END OF PAGE';
+  assert.equal(endMarkerFrame(label, 0), label);
+  const randomFrame = endMarkerFrame(label, SCRAMBLE_HOLD_MS, () => 0);
+  assert.notEqual(randomFrame, label);
+  assert.equal(randomFrame.length, label.length);
+  for (let elapsed = SCRAMBLE_HOLD_MS; elapsed < SCRAMBLE_CYCLE_MS; elapsed += 60) {
+    const frame = endMarkerFrame(label, elapsed, () => 0);
+    assert.equal(frame.length, label.length);
+    assert.equal(frame[2], ' ');
+    assert.equal(frame[6], ' ');
+    assert.equal(frame[9], ' ');
+  }
+  assert.ok(endMarkerFrame(label, SCRAMBLE_CYCLE_MS - 1, () => 0).startsWith(label.slice(0, -1)));
+  assert.equal(endMarkerFrame(label, SCRAMBLE_CYCLE_MS), label);
+  assert.notEqual(endMarkerFrame(label, SCRAMBLE_CYCLE_MS + SCRAMBLE_HOLD_MS, () => 0), label);
 });
 
 test('browser titles stay independent of CMS branding and restore the fixed main-page title', () => {

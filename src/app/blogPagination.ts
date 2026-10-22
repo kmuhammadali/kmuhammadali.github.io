@@ -1,4 +1,4 @@
-export const POSTS_PER_PAGE = 2;
+export const POSTS_PER_PAGE = 3;
 export function blogPage<T>(posts: readonly T[], requestedPage: number) {
   const pageCount = Math.ceil(posts.length / POSTS_PER_PAGE);
   const page = Math.max(0, Math.min(requestedPage, pageCount - 1));

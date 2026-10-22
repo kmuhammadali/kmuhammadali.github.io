@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getMatrixGrid } from './matrixGrid';
 import { useTerminalPlayback } from './useTerminalPlayback';
 import { BlogSection } from './BlogSection';
+import { TextScramble } from './TextScramble';
 import { Button } from './ui/button';
 import { Code, Terminal, Mail } from 'lucide-react';
 import { siteContent } from '../../config/siteContent';
@@ -136,7 +137,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
 
           {/* End of page */}
           <div className="flex flex-col items-center space-y-2 text-primary">
-            <span className="font-mono text-sm">{siteContent.home.scroll}</span>
+            <TextScramble text={siteContent.home.scroll} />
           </div>
         </div>
       </div>
