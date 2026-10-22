@@ -11,6 +11,7 @@ import { PortfolioGrid } from './components/PortfolioGrid';
 import { ContactSection } from './components/ContactSection';
 import { BlogArticle } from './components/BlogArticle';
 import { blogPath, blogSlug } from './blogRouting';
+import { SITE_TITLE } from '../config/pageTitle';
 
 import '../styles/layout.css';
 
@@ -28,6 +29,9 @@ function AppContent() {
     window.addEventListener('popstate', back);
     return () => window.removeEventListener('popstate', back);
   }, []);
+  useEffect(() => {
+    if (!articleSlug) document.title = SITE_TITLE;
+  }, [articleSlug]);
   function openPost(slug: string) {
     window.history.pushState(null, '', blogPath(slug));
     setArticleSlug(slug); window.scrollTo(0, 0);
@@ -44,7 +48,7 @@ function AppContent() {
   };
 
   const renderSection = () => {
-    if (articleSlug) return <BlogArticle slug={articleSlug} onHome={() => changeSection('home')} />;
+    if (articleSlug) return <BlogArticle key={articleSlug} slug={articleSlug} onHome={() => changeSection('home')} />;
     switch (activeSection) {
       case 'home':
         return (

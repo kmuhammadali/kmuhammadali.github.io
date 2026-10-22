@@ -5,6 +5,8 @@ import { runInNewContext } from 'node:vm';
 import { terminalFrame, terminalLength } from '../src/app/components/terminalPlayback.ts';
 import { getPublishedPosts, getPublishedPost, PostNotFound } from '../src/config/postsApi.ts';
 import { blogSlug, blogPath } from '../src/app/blogRouting.ts';
+import { blogPage } from '../src/app/blogPagination.ts';
+import { pageTitle } from '../src/config/pageTitle.ts';
 
 test('terminal types commands only, reveals complete outputs immediately, and ends with an active final command', () => {
   const lines = ['$ whoami', 'Complete output', '$ ls', 'file-a', 'file-b', '$ echo "I.AM.MUHAMMAD.ALI"', 'Never render this'];
@@ -59,4 +61,38 @@ test('GitHub Pages direct article fallback uses a fixed same-origin root and res
   assert.equal(blogSlug(new URL('https://site.example/blog/my-post#part')), 'my-post');
   assert.equal(blogSlug(new URL('https://site.example/?blog=../admin')), null);
   assert.equal(blogPath('my-post'), '/blog/my-post');
+});
+
+
+test('blog pages contain two ordered posts, clamp after shrinking, and hide pagination for zero/one/two posts', () => {
+  const posts = ['newest', 'second', 'third', 'fourth', 'oldest'];
+  for (const [page, expected] of [[0, posts.slice(0, 2)], [1, posts.slice(2, 4)], [2, posts.slice(4)]] as const) {
+    const result = blogPage(posts, page);
+    assert.deepEqual(result.posts, expected);
+    assert.equal(result.pageCount, 3);
+  }
+  assert.deepEqual(blogPage(posts, 99).posts, ['oldest']);
+  assert.deepEqual(blogPage(posts, -1).posts, ['newest', 'second']);
+  assert.deepEqual(blogPage([], 2), { page: 0, pageCount: 0, posts: [] });
+  for (const count of [1, 2]) {
+    const result = blogPage(posts.slice(0, count), 2);
+    assert.equal(result.pageCount, 1);
+    assert.equal(result.page, 0);
+    assert.equal(result.posts.length, count);
+  }
+  assert.equal(blogPage(posts.slice(0, 3), 0).pageCount, 2);
+  assert.deepEqual(posts, ['newest', 'second', 'third', 'fourth', 'oldest']);
+});
+
+test('browser titles stay independent of CMS branding and restore the fixed main-page title', () => {
+  assert.equal(pageTitle(), 'Muhammad Ali');
+  assert.equal(pageTitle('Where Economics Meets Technology'), 'Where Economics Meets Technology | Muhammad Ali');
+  for (const path of ['context/ContentProvider.tsx', 'main.tsx']) {
+    const source = readFileSync(new URL(`../src/${path}`, import.meta.url), 'utf8');
+    assert.ok(!source.includes('document.title'), 'CMS refresh and bootstrap must not race route titles');
+  }
+  const article = readFileSync(new URL('../src/app/components/BlogArticle.tsx', import.meta.url), 'utf8');
+  assert.ok(!article.includes('content.name'));
+  assert.ok(article.includes('document.title = pageTitle(post?.title)'));
+  assert.ok(article.includes('document.title = SITE_TITLE'));
 });

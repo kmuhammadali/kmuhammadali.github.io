@@ -1,14 +1,13 @@
 import { useEffect, useState, type MouseEvent } from 'react';
 import { ArrowLeft, Copy, Share2 } from 'lucide-react';
 import { getPublishedPost, PostNotFound, type Post } from '../../config/postsApi';
-import { useSiteContent } from '../../context/ContentProvider';
+import { pageTitle, SITE_TITLE } from '../../config/pageTitle';
 import { blogPath } from '../blogRouting';
 import { Button } from './ui/button';
 import { PostCover } from './PostCover';
 import { postContentHtml } from '../../content/postContent';
 import '../../content/postContent.css';
 export function BlogArticle({ slug, onHome }: { slug: string; onHome: () => void }) {
-  const { content } = useSiteContent();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -24,9 +23,9 @@ export function BlogArticle({ slug, onHome }: { slug: string; onHome: () => void
     return () => controller.abort();
   }, [slug, attempt]);
   useEffect(() => {
-    if (post) document.title = `${post.title} | ${content.name}`;
-    return () => { document.title = content.name; };
-  }, [post, content.name]);
+    document.title = pageTitle(post?.title);
+    return () => { document.title = SITE_TITLE; };
+  }, [post]);
   const url = new URL(blogPath(slug), window.location.origin).href;
   async function copy() {
     try { await navigator.clipboard.writeText(url); setNotice('Link copied.'); }

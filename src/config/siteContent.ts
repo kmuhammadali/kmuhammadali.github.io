@@ -18,7 +18,7 @@ export const siteContent = {
       { section: 'skills', title: './skills.mov', description: 'My Skills' },
       { section: 'contact', title: './contact.raw', description: 'Get in Touch' },
     ],
-    scroll: 'scroll_down()',
+    scroll: '// END OF PAGE',
   },
   // Original gallery images are decorative placeholders; replace them when ready.
   about: {

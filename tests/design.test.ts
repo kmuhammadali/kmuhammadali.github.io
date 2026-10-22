@@ -17,7 +17,11 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
     ].map(match => match[1]);
 
     if (name === 'HeroSection') {
-      const unchangedClasses = (expected as string[]).filter(
+      const unchangedClasses = (expected as string[])
+        .map(className => className === 'flex flex-col items-center space-y-2 text-primary animate-bounce'
+          ? 'flex flex-col items-center space-y-2 text-primary' : className)
+        .filter(className => className !== 'w-5 h-5')
+        .filter(
         className => ![
           'text-primary',
           'text-muted-foreground',
@@ -34,6 +38,9 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
         unchangedClasses
       );
 
+      assert.equal(siteContent.home.scroll, '// END OF PAGE');
+      assert.ok(source.includes('{siteContent.home.scroll}'));
+      assert.ok(!source.includes('ChevronDown') && !source.includes('animate-bounce'));
       assert.ok(source.includes("isCommand ? 'text-primary' : 'text-green-dark'"));
     } else {
       assert.deepEqual(actual, expected);

@@ -50,9 +50,6 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       window.removeEventListener("focus", reload);
     };
   }, [refresh]);
-  useEffect(() => {
-    document.title = "Muhammad Ali";
-  }, [content.name]);
   return (
     <ContentContext.Provider value={{ content, isLoading, error, refresh }}>
       {children}

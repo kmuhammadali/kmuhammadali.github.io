@@ -3,7 +3,5 @@
   import App from "./app/App.tsx";
   import "./styles/index.css";
 
-  document.title = "Muhammad Ali";
-
   createRoot(document.getElementById("root")!).render(<App />);
   

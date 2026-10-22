@@ -4,7 +4,8 @@ import { getMatrixGrid } from './matrixGrid';
 import { useTerminalPlayback } from './useTerminalPlayback';
 import { BlogSection } from './BlogSection';
 import { Button } from './ui/button';
-import { ChevronDown, Code, Terminal, Mail } from 'lucide-react';
+import { Code, Terminal, Mail } from 'lucide-react';
+import { siteContent } from '../../config/siteContent';
 
 interface HeroSectionProps {
   onSectionChange: (section: string) => void;
@@ -133,10 +134,9 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
             </Button>
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="flex flex-col items-center space-y-2 text-primary animate-bounce">
-            <span className="font-mono text-sm">{home.scroll}</span>
-            <ChevronDown className="w-5 h-5" />
+          {/* End of page */}
+          <div className="flex flex-col items-center space-y-2 text-primary">
+            <span className="font-mono text-sm">{siteContent.home.scroll}</span>
           </div>
         </div>
       </div>
