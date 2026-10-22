@@ -79,7 +79,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-primary"></div>
               <span className="ml-4 font-mono text-sm text-muted-foreground">
-                {home.terminal}
+                <TextScramble text={home.terminal} />
               </span>
             </div>
 
@@ -137,7 +137,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
 
           {/* End of page */}
           <div className="flex flex-col items-center space-y-2 text-primary">
-            <TextScramble text={siteContent.home.scroll} />
+            <TextScramble text={siteContent.home.scroll} loop className="font-mono text-sm whitespace-pre" />
           </div>
         </div>
       </div>

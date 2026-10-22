@@ -43,3 +43,33 @@ test('scramble respects initial/dynamic reduced motion, stops when hidden and cl
   assert.equal(tick, null);
   dom.window.close();
 });
+
+test('one-time headings stop scheduling frames and do not replay on visibility changes; new text animates once', async t => {
+  const dom = new JSDOM('<div id="root"></div>', { pretendToBeVisual: true });
+  Object.assign(globalThis, { window: dom.window, document: dom.window.document, IS_REACT_ACT_ENVIRONMENT: true });
+  let now = 0, tick: (() => void) | null = null;
+  Object.defineProperty(dom.window, 'matchMedia', { value: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }) });
+  t.mock.method(performance, 'now', () => now);
+  t.mock.method(globalThis, 'setInterval', (fn: () => void) => { tick = fn; return 1 as unknown as ReturnType<typeof setInterval>; });
+  t.mock.method(globalThis, 'clearInterval', () => { tick = null; });
+  function Heading({ text, enabled }: { text: string; enabled: boolean }) {
+    return createElement('span', null, useTextScramble(text, false, enabled));
+  }
+  const node = dom.window.document.getElementById('root')!, root = createRoot(node);
+  await act(async () => root.render(createElement(Heading, { text: 'ABOUT', enabled: false })));
+  assert.equal(tick, null, 'offscreen headings do not animate');
+  await act(async () => root.render(createElement(Heading, { text: 'ABOUT', enabled: true })));
+  assert.notEqual(node.textContent, 'ABOUT');
+  await act(async () => { now = 1200; (tick as (() => void) | null)?.(); });
+  assert.equal(node.textContent, 'ABOUT');
+  assert.equal(tick, null, 'one-shot timer stops after resolving');
+  await act(async () => dom.window.document.dispatchEvent(new dom.window.Event('visibilitychange')));
+  assert.equal(tick, null, 'completed titles do not restart on refocus');
+  await act(async () => root.render(createElement(Heading, { text: 'SKILLS', enabled: true })));
+  assert.ok(tick, 'new heading gets its own animation');
+  await act(async () => { now = 2400; (tick as (() => void) | null)?.(); });
+  assert.equal(node.textContent, 'SKILLS');
+  assert.equal(tick, null);
+  await act(async () => root.unmount());
+  dom.window.close();
+});

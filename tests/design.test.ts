@@ -31,6 +31,7 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
 
       assert.deepEqual(
         actual.filter(className => ![
+          'font-mono text-sm whitespace-pre',
           'text-primary',
           'text-muted-foreground',
           'text-green-dark',
@@ -39,7 +40,7 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
       );
 
       assert.equal(siteContent.home.scroll, '// END OF PAGE');
-      assert.ok(source.includes('<TextScramble text={siteContent.home.scroll} />'));
+      assert.ok(source.includes('<TextScramble text={siteContent.home.scroll} loop'));
       assert.ok(!source.includes('ChevronDown') && !source.includes('animate-bounce'));
       assert.ok(source.includes("isCommand ? 'text-primary' : 'text-green-dark'"));
     } else {

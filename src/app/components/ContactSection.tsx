@@ -1,3 +1,4 @@
+import { TextScramble } from './TextScramble';
 import { useSiteContent } from '../../context/ContentProvider';
 import { sendContact } from '../../lib/contact';
 import { useEffect, useRef, useState } from 'react';
@@ -72,7 +73,7 @@ export function ContactSection() {
         {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-block cyber-border bg-black-light/50 rounded px-6 py-3 mb-4">
-            <h2 className="font-mono text-primary">{content.title}</h2>
+            <h2 className="font-mono text-primary"><TextScramble text={content.title} /></h2>
           </div>
           <p className="font-mono text-muted-foreground max-w-2xl mx-auto">
             {content.description}

@@ -1,3 +1,4 @@
+import { TextScramble } from './TextScramble';
 import { useEffect, useState, type MouseEvent } from 'react';
 import { ArrowLeft, Copy, Share2 } from 'lucide-react';
 import { getPublishedPost, PostNotFound, type Post } from '../../config/postsApi';
@@ -47,7 +48,7 @@ export function BlogArticle({ slug, onHome }: { slug: string; onHome: () => void
           {loading ? <p role="status" className="font-mono text-muted-foreground">Loading article…</p> : error ? (
             <div role="alert" className="font-mono text-muted-foreground"><h1 className="text-primary mb-3">{error}</h1>{!missing && <Button variant="outline" className="text-primary border-primary" onClick={() => setAttempt(a => a + 1)}>Retry</Button>}</div>
           ) : post && <>
-            <h1 className="font-mono text-primary text-2xl md:text-3xl break-words mb-4">{post.title}</h1>
+            <h1 className="font-mono text-primary text-2xl md:text-3xl break-words mb-4"><TextScramble text={post.title} /></h1>
             {post.published_at && <time dateTime={post.published_at} className="font-mono text-muted-foreground text-sm block mb-6">{new Intl.DateTimeFormat('en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(post.published_at))}</time>}
             <PostCover key={post.cover_image_url} url={post.cover_image_url} title={post.title} />
             <div className="mt-6 post-content" dangerouslySetInnerHTML={{ __html: postContentHtml(post.content) }} />

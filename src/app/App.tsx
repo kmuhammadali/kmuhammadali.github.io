@@ -5,6 +5,7 @@ import {
   useSiteContent,
 } from '../context/ContentProvider';
 
+import { HackerCursor } from './components/HackerCursor';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { PortfolioGrid } from './components/PortfolioGrid';
@@ -56,10 +57,10 @@ function AppContent() {
         );
 
       case 'about':
-        return <PortfolioGrid {...content.about} />;
+        return <PortfolioGrid key="about" {...content.about} />;
 
       case 'skills':
-        return <PortfolioGrid {...content.skills} />;
+        return <PortfolioGrid key="skills" {...content.skills} />;
 
       case 'contact':
         return <ContactSection />;
@@ -73,6 +74,7 @@ function AppContent() {
 
   return (
     <div
+      data-public-portfolio
       className="min-h-screen bg-background text-foreground"
       style={
         {
@@ -80,6 +82,7 @@ function AppContent() {
         } as CSSProperties
       }
     >
+      <HackerCursor />
       <Header
         activeSection={activeSection}
         onSectionChange={changeSection}

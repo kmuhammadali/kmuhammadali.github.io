@@ -1,3 +1,4 @@
+import { TextScramble } from './TextScramble';
 import { useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -48,7 +49,7 @@ export function PortfolioGrid({ title, description, items, type }: PortfolioGrid
         {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-block cyber-border bg-black-light/50 rounded px-6 py-3 mb-4">
-            <h2 className="font-mono text-primary">{getTypeLabel()}</h2>
+            <h2 className="font-mono text-primary"><TextScramble text={getTypeLabel()} /></h2>
           </div>
           <p className="font-mono text-muted-foreground max-w-2xl mx-auto">
             {description}

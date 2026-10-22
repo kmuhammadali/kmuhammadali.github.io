@@ -1,0 +1,24 @@
+/* Scoped animation layers retain the exact resting typography and layout. */
+.scramble-text { position: relative; display: inline-grid; max-width: 100%; vertical-align: baseline; }
+.scramble-text__measure { visibility: hidden; grid-area: 1 / 1; min-width: 0; }
+.scramble-text__visual { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+
+[data-public-portfolio][data-custom-cursor],
+[data-public-portfolio][data-custom-cursor] * { cursor: none !important; }
+.hacker-cursor { position: fixed; inset: 0; z-index: 10000; pointer-events: none; opacity: 0; transition: opacity 80ms linear; }
+.hacker-cursor[data-visible] { opacity: 1; }
+.hacker-cursor__point { position: absolute; left: -1px; top: -1px; width: 2px; height: 2px; background: var(--primary); }
+.hacker-cursor__halo { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; }
+.hacker-cursor__halo > span { display: block; width: 100%; height: 100%; border: 1px solid var(--primary); border-radius: 2px; opacity: 0.7; box-shadow: 0 0 5px #00ff4126; transition: transform 130ms ease, opacity 130ms ease; }
+.hacker-cursor[data-interactive] .hacker-cursor__halo > span { transform: scale(1.4) rotate(45deg); opacity: 1; }
+.hacker-cursor__ripple { position: absolute; width: 20px; height: 20px; margin: -10px; border: 1px solid var(--primary); border-radius: 3px; animation: cursor-ripple 400ms ease-out forwards; }
+.hacker-cursor__ripple::after { content: ''; position: absolute; inset: 3px; border-top: 1px solid #00e5ff; transform: translateX(3px); opacity: 0.6; }
+@keyframes cursor-ripple { 0% { transform: scale(0.35) rotate(0deg); opacity: 0.65; } 30% { transform: scale(1) rotate(12deg); } 100% { transform: scale(2.1) rotate(40deg); opacity: 0; } }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .hacker-cursor { display: none; }
+  [data-public-portfolio][data-custom-cursor], [data-public-portfolio][data-custom-cursor] * { cursor: revert !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scramble-text__measure { visibility: visible; }
+  .scramble-text__visual { display: none; }
+}

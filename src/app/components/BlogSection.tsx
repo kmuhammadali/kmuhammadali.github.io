@@ -1,3 +1,4 @@
+import { TextScramble } from './TextScramble';
 import { useEffect, useState, type MouseEvent } from 'react';
 import { getPublishedPosts, type PostSummary } from '../../config/postsApi';
 import { blogPath } from '../blogRouting';
@@ -26,7 +27,7 @@ export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault(); onOpenPost(slug);
   };
-  const heading = <h2 id="blog-title" className="font-mono text-primary mb-4">BLOG</h2>;
+  const heading = <h2 id="blog-title" className="font-mono text-primary mb-4"><TextScramble text="BLOG" /></h2>;
   return (
     <section aria-labelledby="blog-title" className="mb-8 text-left relative z-10">
       {loading || error || !posts.length ? (
@@ -49,7 +50,7 @@ export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void
               <article className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center min-w-0">
                 <div className="min-w-0">
                   <h3 className="font-mono text-primary text-xl mb-3 break-words">
-                    <span className="hover:underline">{post.title}</span>
+                    <span className="hover:underline"><TextScramble text={post.title} /></span>
                   </h3>
                   {date.dateTime ? <time dateTime={date.dateTime} className="block font-mono text-muted-foreground text-xs mb-3">{date.label}</time>
                     : <span className="block font-mono text-muted-foreground text-xs mb-3">{date.label}</span>}
