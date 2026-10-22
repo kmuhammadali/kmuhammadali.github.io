@@ -5,6 +5,8 @@ import { useSiteContent } from '../../context/ContentProvider';
 import { blogPath } from '../blogRouting';
 import { Button } from './ui/button';
 import { PostCover } from './PostCover';
+import { postContentHtml } from '../../content/postContent';
+import '../../content/postContent.css';
 export function BlogArticle({ slug, onHome }: { slug: string; onHome: () => void }) {
   const { content } = useSiteContent();
   const [post, setPost] = useState<Post | null>(null);
@@ -49,7 +51,7 @@ export function BlogArticle({ slug, onHome }: { slug: string; onHome: () => void
             <h1 className="font-mono text-primary text-2xl md:text-3xl break-words mb-4">{post.title}</h1>
             {post.published_at && <time dateTime={post.published_at} className="font-mono text-muted-foreground text-sm block mb-6">{new Intl.DateTimeFormat('en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(post.published_at))}</time>}
             <PostCover key={post.cover_image_url} url={post.cover_image_url} title={post.title} />
-            <div className="mt-6 font-mono text-green-dark leading-relaxed whitespace-pre-wrap break-words">{post.content}</div>
+            <div className="mt-6 post-content" dangerouslySetInnerHTML={{ __html: postContentHtml(post.content) }} />
             <div className="flex flex-wrap gap-3 mt-8">
               <Button variant="outline" className="text-primary border-primary hover:bg-primary/10" onClick={copy}><Copy className="w-4 h-4 mr-2" />Copy link</Button>
               {typeof navigator.share === 'function' && <Button variant="outline" className="text-primary border-primary hover:bg-primary/10" onClick={share}><Share2 className="w-4 h-4 mr-2" />Share</Button>}

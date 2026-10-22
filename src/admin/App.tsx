@@ -4,6 +4,7 @@ import { pageTemplate, settingKeys } from "../../cms/shared/validation";
 import type { Page, Resource, RecordData } from "../../cms/shared/types";
 import { ADMIN_API_URL, AdminError, cmsApi } from "./api";
 import { JsonFields } from "./JsonFields";
+import { PostEditor } from "./PostEditor";
 import "./admin.css";
 const sections = [
   { name: "Home", resource: "content", page: "home" },
@@ -600,6 +601,9 @@ export default function AdminApp() {
                     {entityFields[editing.resource]?.map((field) => {
                       const value = data[field];
                       const id = `record-${field}`;
+                      if (editing.resource === "posts" && field === "content")
+                        return <PostEditor key={String(data.id)} value={String(value ?? "")} disabled={busy}
+                          onChange={(content) => update({ ...data, content })} />;
                       if (field === "tags")
                         return (
                           <JsonFields
