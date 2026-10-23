@@ -1,5 +1,5 @@
 import { useSiteContent } from '../../context/ContentProvider';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getMatrixGrid } from './matrixGrid';
 import { useTerminalPlayback } from './useTerminalPlayback';
 import { BlogSection } from './BlogSection';
@@ -44,28 +44,45 @@ export function HeroSection({ onSectionChange, onOpenPost }: HeroSectionProps) {
     return () => window.removeEventListener('resize', measure);
   }, []);
 
-  const [showCursor, setShowCursor] = useState(true);
-  
-  
-const terminalLines = [
-  '$ whoami',
-  home.role,
-  '$ ls -la portfolio/',
-  ...home.directories,
-  '$ cat mission.txt',
-  ...home.mission,
-  `$ echo "${home.typingText}"`,
-];
+  const terminalLines = [
+    '$ whoami',
+    home.role,
+    '$ ls -la portfolio/',
+    ...home.directories,
+    '$ cat mission.txt',
+    ...home.mission,
+    `$ echo "${home.typingText}"`,
+  ];
 
-const frame = useTerminalPlayback(terminalLines, !isLoading);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const frame = useTerminalPlayback(terminalLines, !isLoading, terminalRef);
 
+  const cardsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const cursorTimer = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 500);
-
-    return () => clearInterval(cursorTimer);
+    const cards = cardsRef.current;
+    if (!cards || typeof IntersectionObserver === 'undefined') return;
+    const visible = new Set<Element>();
+    const update = () => {
+      for (const card of cards.children) card.toggleAttribute('data-visible', !document.hidden && visible.has(card));
+    };
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target); else visible.delete(entry.target);
+      }
+      update();
+    }, { threshold: 0.1 });
+    for (const card of cards.children) observer.observe(card);
+    document.addEventListener('visibilitychange', update);
+    return () => { observer.disconnect(); document.removeEventListener('visibilitychange', update); };
   }, []);
+  // Stable glyphs: terminal typing and cursor movement must not rebuild the Matrix.
+  const matrixCells = useMemo(() => Array.from({ length: matrixGrid.rows }, (_, i) => (
+    <div key={i} className="whitespace-nowrap">
+      {Array.from({ length: matrixGrid.columns }, (_, j) => (
+        <span key={j} className="inline-block w-3">{Math.random() > 0.5 ? '1' : '0'}</span>
+      ))}
+    </div>
+  )), [matrixGrid.rows, matrixGrid.columns]);
 
   return (
     <section className="min-h-screen flex items-center justify-center relative matrix-bg">
@@ -73,7 +90,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
         <div className="max-w-4xl mx-auto">
           
           {/* Terminal Window */}
-          <div className="cyber-border bg-black-light/50 rounded-lg p-8 mb-8">
+          <div ref={terminalRef} className="cyber-border bg-black-light/50 rounded-lg p-8 mb-8">
             <div className="flex items-center space-x-2 mb-6 pb-4 border-b border-primary/20">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -91,8 +108,8 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
                     className={isCommand ? 'text-primary' : 'text-green-dark'}
                   >
                     {text}
-                    {isActive && showCursor && (
-                      <span className="text-primary">_</span>
+                    {isActive && (
+                      <span data-terminal-caret className="text-primary">_</span>
                     )}
                   </div>
                 );
@@ -103,7 +120,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
           <BlogSection onOpenPost={onOpenPost} />
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+          <div ref={cardsRef} data-navigation-cards className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
             <Button
               onClick={() => onSectionChange(home.cards[0].section)}
               className="cyber-border bg-black-light hover:bg-primary/10 text-primary border-primary p-6 h-auto flex flex-col items-center space-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
@@ -136,7 +153,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
           </div>
 
           {/* End of page */}
-          <div className="flex flex-col items-center space-y-2 text-primary">
+          <div data-end-region className="flex flex-col items-center space-y-2 text-primary">
             <TextScramble text={siteContent.home.scroll} loop className="font-mono text-sm whitespace-pre" />
           </div>
         </div>
@@ -145,15 +162,7 @@ const frame = useTerminalPlayback(terminalLines, !isLoading);
       {/* Matrix-style background effect */}
       <div data-matrix-background aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-5">
         <div ref={matrixRef} className="text-primary font-mono text-xs leading-none overflow-hidden h-full">
-          {Array.from({ length: matrixGrid.rows }, (_, i) => (
-            <div key={i} className="whitespace-nowrap">
-              {Array.from({ length: matrixGrid.columns }, (_, j) => (
-                <span key={j} className="inline-block w-3">
-                  {Math.random() > 0.5 ? '1' : '0'}
-                </span>
-              ))}
-            </div>
-          ))}
+          {matrixCells}
         </div>
       </div>
     </section>

@@ -29,7 +29,11 @@ test('cursor follows mouse, detects controls and clicks, restores native cursor 
   pointer('pointermove');
   assert.ok(nodes('host').hasAttribute('data-custom-cursor'));
   assert.ok(nodes('layer').hasAttribute('data-interactive'));
+  pointer('pointermove'); pointer('pointermove');
+  assert.equal(nodes('point').style.transform, '', 'pointer events coalesce DOM writes into a frame');
+  const [id, draw] = [...frames][0]; frames.delete(id); draw(16.67);
   assert.match(nodes('point').style.transform, /120px, 80px/);
+  pointer('pointermove');
   assert.equal(frames.size, 1, 'only one movement frame is scheduled');
   pointer('pointerdown'); assert.equal(ripples, 1);
   pointer('pointermove', 'touch');

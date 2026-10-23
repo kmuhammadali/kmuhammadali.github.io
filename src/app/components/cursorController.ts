@@ -7,32 +7,38 @@ export function installPortfolioCursor({ host, layer, point, halo, onRipple }: C
   const doc = host.ownerDocument, win = doc.defaultView!;
   const finePointer = win.matchMedia('(hover: hover) and (pointer: fine)');
   const reducedMotion = win.matchMedia('(prefers-reduced-motion: reduce)');
-  let frame = 0, active = false, x = 0, y = 0, targetX = 0, targetY = 0;
+  let frame = 0, active = false, x = 0, y = 0, targetX = 0, targetY = 0, lastTime = 0;
+  let lastTarget: EventTarget | null = null;
   const allowed = () => finePointer.matches && !reducedMotion.matches;
   const hide = () => {
-    active = false;
+    active = false; lastTime = 0; lastTarget = null;
     host.removeAttribute('data-custom-cursor');
     layer.removeAttribute('data-visible');
     layer.removeAttribute('data-interactive');
     win.cancelAnimationFrame(frame); frame = 0;
   };
-  const draw = () => {
-    x += (targetX - x) * 0.28; y += (targetY - y) * 0.28;
+  const draw = (time: number) => {
+    const amount = 1 - Math.pow(0.72, Math.min(64, lastTime ? time - lastTime : 16.67) / 16.67);
+    lastTime = time;
+    x += (targetX - x) * amount; y += (targetY - y) * amount;
+    point.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
     halo.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     if (active && Math.hypot(targetX - x, targetY - y) > 0.1) frame = win.requestAnimationFrame(draw);
-    else frame = 0;
+    else { frame = 0; lastTime = 0; }
   };
   const interactive = (target: EventTarget | null) => {
+    if (target === lastTarget) return;
+    lastTarget = target;
     const control = target instanceof win.Element ? target.closest('a,button,input,textarea,select,summary,label,[role="button"],[contenteditable="true"]') : null;
     layer.toggleAttribute('data-interactive', !!control && !control.matches(':disabled,[aria-disabled="true"]'));
   };
   const move = (event: PointerEvent) => {
     if (!allowed() || event.pointerType !== 'mouse' || !host.contains(event.target as Node)) { hide(); return; }
     targetX = event.clientX; targetY = event.clientY;
-    if (!active) { x = targetX; y = targetY; }
-    active = true;
-    host.setAttribute('data-custom-cursor', ''); layer.setAttribute('data-visible', '');
-    point.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+    if (!active) {
+      x = targetX; y = targetY; active = true;
+      host.setAttribute('data-custom-cursor', ''); layer.setAttribute('data-visible', '');
+    }
     interactive(event.target);
     if (!frame) frame = win.requestAnimationFrame(draw);
   };

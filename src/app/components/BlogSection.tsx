@@ -44,10 +44,10 @@ export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void
           {visible.posts.map((post, index) => {
             const date = publicationDate(post.published_at);
             return (
-            <a key={post.id} href={blogPath(post.slug)} onClick={event => open(event, post.slug)} aria-label={`Read ${post.title}`}
+            <a data-blog-post key={post.id} href={blogPath(post.slug)} onClick={event => open(event, post.slug)} aria-label={`Read ${post.title}`}
               className="cyber-border bg-black-light/50 rounded-lg p-6 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
               {index === 0 && heading}
-              <article className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center min-w-0">
+              <article className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start min-w-0">
                 <div className="min-w-0">
                   <h3 className="font-mono text-primary text-xl mb-3 break-words">
                     <span className="hover:underline"><TextScramble text={post.title} /></span>

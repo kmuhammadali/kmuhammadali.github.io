@@ -17,6 +17,9 @@ test('original styles and Home/Contact/Header/gallery visible class lists are un
     ].map(match => match[1]);
 
     if (name === 'HeroSection') {
+      // Memoized Matrix cells moved before the main JSX; retain the original class guard.
+      assert.deepEqual(actual.splice(0, 2), ['whitespace-nowrap', 'inline-block w-3']);
+      actual.push('whitespace-nowrap', 'inline-block w-3');
       const unchangedClasses = (expected as string[])
         .map(className => className === 'flex flex-col items-center space-y-2 text-primary animate-bounce'
           ? 'flex flex-col items-center space-y-2 text-primary' : className)
