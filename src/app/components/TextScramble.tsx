@@ -36,7 +36,7 @@ export function TextScramble({ text, loop = false, className = '' }: { text: str
   const display = useTextScramble(text, loop, visible);
   const originalGlyphs = [...text], displayGlyphs = [...display];
   return (
-    <span ref={element} data-scramble-text data-end-marker={loop ? '' : undefined} className={`scramble-text ${className}`}>
+    <span ref={element} data-scramble-text data-scrambling={display !== text ? '' : undefined} data-end-marker={loop ? '' : undefined} className={`scramble-text ${className}`}>
       <span aria-hidden="true" className="scramble-text__measure">{text}</span>
       <span aria-hidden="true" className="scramble-text__visual">
         {displayGlyphs.map((character, index) => <span key={index} style={{ color: scrambleColor(originalGlyphs[index] ?? '', character, index) }}>{character}</span>)}

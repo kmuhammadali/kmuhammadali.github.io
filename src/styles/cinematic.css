@@ -1,7 +1,10 @@
 /* Scoped animation layers retain the exact resting typography and layout. */
 .scramble-text { position: relative; display: inline-grid; max-width: 100%; vertical-align: baseline; }
-.scramble-text__measure { visibility: hidden; grid-area: 1 / 1; min-width: 0; }
-.scramble-text__visual { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.scramble-text__measure { visibility: visible; grid-area: 1 / 1; min-width: 0; }
+.scramble-text__visual { position: absolute; inset: 0; pointer-events: none; visibility: hidden; overflow-wrap: anywhere; }
+
+.scramble-text[data-scrambling] .scramble-text__measure { visibility: hidden; }
+.scramble-text[data-scrambling] .scramble-text__visual { visibility: visible; }
 
 [data-public-portfolio][data-custom-cursor],
 [data-public-portfolio][data-custom-cursor] * { cursor: none !important; }
@@ -19,6 +22,6 @@
   [data-public-portfolio][data-custom-cursor], [data-public-portfolio][data-custom-cursor] * { cursor: revert !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .scramble-text__measure { visibility: visible; }
+  .scramble-text[data-scrambling] .scramble-text__measure { visibility: visible; }
   .scramble-text__visual { display: none; }
 }

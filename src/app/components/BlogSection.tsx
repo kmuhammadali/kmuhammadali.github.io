@@ -57,7 +57,7 @@ export function BlogSection({ onOpenPost }: { onOpenPost: (slug: string) => void
                   <p className="font-mono text-muted-foreground text-sm whitespace-pre-wrap break-words">{post.excerpt}</p>
                 </div>
                 <div className="min-w-0">
-                  <PostCover key={post.cover_image_url} url={post.cover_image_url} title={post.title} />
+                  <PostCover compact key={post.cover_image_url} url={post.cover_image_url} title={post.title} />
                 </div>
               </article>
             </a>

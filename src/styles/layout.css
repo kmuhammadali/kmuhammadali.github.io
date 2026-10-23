@@ -1,4 +1,4 @@
-/* Geometry corrections only. Original theme, components and animation rules stay intact. */
+/* Scoped geometry and motion corrections retain the original theme. */
 main[data-section="home"] > section {
   /* Clear the measured fixed header, including expanded mobile navigation. */
   padding-block: calc(var(--site-header-height, 4rem) + 1rem);
@@ -27,11 +27,21 @@ main[data-section="home"] > section.matrix-bg {
 [data-terminal-caret] { animation: terminal-cursor 1s step-end infinite paused; }
 [data-terminal-active] [data-terminal-caret] { animation-play-state: running; }
 [data-navigation-cards] > button::before {
+  z-index: 0;
+  pointer-events: none;
   animation: card-border-cycle 3.6s ease-in-out infinite;
   animation-play-state: paused;
 }
+[data-navigation-cards] > button > * { position: relative; z-index: 1; }
 [data-navigation-cards] > button[data-visible]::before { animation-play-state: running; }
 @keyframes card-border-cycle { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   [data-terminal-caret], [data-navigation-cards] > button::before { animation: none; }
+}
+
+/* Home thumbnails stay compact and identical, independent of excerpt length.
+   Full article covers retain their existing dimensions. */
+[data-blog-cover] { height: 10rem; width: 100%; object-fit: cover; }
+@media (min-width: 768px) {
+  [data-blog-post] > article { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
 }
