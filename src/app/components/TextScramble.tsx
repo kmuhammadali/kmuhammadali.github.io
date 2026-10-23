@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useScrambleLayout } from './useScrambleLayout';
 import { useTextScramble } from './useTextScramble';
 import { headingAnimations } from './animationQueue';
 import { scrambleColor } from './scrambleFrames';
@@ -33,13 +34,14 @@ export function TextScramble({ text, loop = false, className = '' }: { text: str
     document.addEventListener('visibilitychange', update);
     return () => { observer?.disconnect(); cancel?.(); document.removeEventListener('visibilitychange', update); };
   }, [loop, text]);
+  const boxes = useScrambleLayout(element, text);
   const display = useTextScramble(text, loop, visible);
   const originalGlyphs = [...text], displayGlyphs = [...display];
   return (
     <span ref={element} data-scramble-text data-scrambling={display !== text ? '' : undefined} data-end-marker={loop ? '' : undefined} className={`scramble-text ${className}`}>
       <span aria-hidden="true" className="scramble-text__measure">{text}</span>
       <span aria-hidden="true" className="scramble-text__visual">
-        {displayGlyphs.map((character, index) => <span key={index} style={{ color: scrambleColor(originalGlyphs[index] ?? '', character, index) }}>{character}</span>)}
+        {displayGlyphs.map((character, index) => <span key={index} style={{ ...(boxes?.[index] ? { position: 'absolute', ...boxes[index], lineHeight: `${boxes[index].height}px`, whiteSpace: 'pre', overflow: 'hidden' } : {}), color: scrambleColor(originalGlyphs[index] ?? '', character, index) }}>{character}</span>)}
       </span>
       <span className="sr-only">{text}</span>
     </span>

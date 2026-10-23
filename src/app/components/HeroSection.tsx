@@ -1,6 +1,5 @@
 import { useSiteContent } from '../../context/ContentProvider';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { getMatrixGrid } from './matrixGrid';
+import { useEffect, useRef } from 'react';
 import { useTerminalPlayback } from './useTerminalPlayback';
 import { BlogSection } from './BlogSection';
 import { TextScramble } from './TextScramble';
@@ -17,33 +16,6 @@ export function HeroSection({ onSectionChange, onOpenPost }: HeroSectionProps) {
   const { content, isLoading } = useSiteContent();
   const home = content.home;
   
-  const matrixRef = useRef<HTMLDivElement>(null);
-  const [matrixGrid, setMatrixGrid] = useState({ rows: 50, columns: 100 });
-
-  useLayoutEffect(() => {
-    const matrix = matrixRef.current;
-    if (!matrix) return;
-    const measure = () => {
-      const row = matrix.firstElementChild;
-      const cell = row?.firstElementChild;
-      if (!row || !cell) return;
-      const bounds = matrix.getBoundingClientRect();
-      const cellWidth = cell.getBoundingClientRect().width;
-      const cellHeight = row.getBoundingClientRect().height;
-      if (!bounds.width || !bounds.height || !cellWidth || !cellHeight) return;
-      const next = getMatrixGrid(bounds.width, bounds.height, cellWidth, cellHeight);
-      setMatrixGrid(previous => previous.rows === next.rows && previous.columns === next.columns ? previous : next);
-    };
-    measure();
-    if (typeof ResizeObserver !== 'undefined') {
-      const observer = new ResizeObserver(measure);
-      observer.observe(matrix);
-      return () => observer.disconnect();
-    }
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, []);
-
   const terminalLines = [
     '$ whoami',
     home.role,
@@ -75,15 +47,6 @@ export function HeroSection({ onSectionChange, onOpenPost }: HeroSectionProps) {
     document.addEventListener('visibilitychange', update);
     return () => { observer.disconnect(); document.removeEventListener('visibilitychange', update); };
   }, []);
-  // Stable glyphs: terminal typing and cursor movement must not rebuild the Matrix.
-  const matrixCells = useMemo(() => Array.from({ length: matrixGrid.rows }, (_, i) => (
-    <div key={i} className="whitespace-nowrap">
-      {Array.from({ length: matrixGrid.columns }, (_, j) => (
-        <span key={j} className="inline-block w-3">{Math.random() > 0.5 ? '1' : '0'}</span>
-      ))}
-    </div>
-  )), [matrixGrid.rows, matrixGrid.columns]);
-
   return (
     <section className="min-h-screen flex items-center justify-center relative matrix-bg">
       <div className="container mx-auto px-4 text-center">
@@ -159,12 +122,7 @@ export function HeroSection({ onSectionChange, onOpenPost }: HeroSectionProps) {
         </div>
       </div>
       
-      {/* Matrix-style background effect */}
-      <div data-matrix-background aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-5">
-        <div ref={matrixRef} className="text-primary font-mono text-xs leading-none overflow-hidden h-full">
-          {matrixCells}
-        </div>
-      </div>
+
     </section>
   );
 }

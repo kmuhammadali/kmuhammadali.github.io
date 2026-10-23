@@ -5,6 +5,7 @@ import {
   useSiteContent,
 } from '../context/ContentProvider';
 
+import { MatrixBackground } from './components/MatrixBackground';
 import { HackerCursor } from './components/HackerCursor';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
@@ -82,6 +83,7 @@ function AppContent() {
         } as CSSProperties
       }
     >
+      <MatrixBackground />
       <HackerCursor />
       <Header
         activeSection={activeSection}

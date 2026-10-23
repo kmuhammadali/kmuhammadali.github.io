@@ -45,3 +45,9 @@ main[data-section="home"] > section.matrix-bg {
 @media (min-width: 768px) {
   [data-blog-post] > article { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
 }
+
+/* One viewport-sized binary field, retained across routes and independent of scroll. */
+[data-public-portfolio] { position: relative; isolation: isolate; }
+.portfolio-matrix { position: fixed; inset: 0; width: 100%; height: 100%; opacity: .05; pointer-events: none; z-index: 0; }
+[data-public-portfolio] > main, [data-public-portfolio] > footer { position: relative; z-index: 1; }
+[data-public-portfolio] > footer { background: var(--background); }
